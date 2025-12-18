@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="navbar.css">
+
+<nav class="glass-nav">
+    <div class="liquid-glass-bg"></div>
+
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="approach.html">Our Approach</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+    </ul>
+</nav>
+
+<svg style="display: none;">
+    <filter id="distortion">
+        <feTurbulence type="turbulence" baseFrequency="0.02 0.05" numOctaves="1" result="turbulence"/>
+        <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="15" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+</svg>

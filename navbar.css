@@ -1,0 +1,134 @@
+/* --- 1. IMPORT TOURNEY FONT --- */
+@import url('https://fonts.googleapis.com/css2?family=Advent+Pro:ital,wght@0,100..900;1,100..900&family=Amatic+SC:wght@400;700&family=BBH+Bartle&family=Bitcount+Prop+Single:wght@100..900&family=Dosis:wght@200..800&family=Josefin+Slab:ital,wght@0,100..700;1,100..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Quicksand:wght@300..700&display=swap');
+
+/* --- 2. MAIN NAVBAR CONTAINER --- */
+.glass-nav {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    
+    /* Start State: Hidden above */
+    transform: translate(-50%, -200%);
+
+    /* Size & Shape */
+    padding: 20px 40px; /* Increased side padding for better look */
+    width: auto;
+    border-radius: 50px;
+    
+    /* Layout */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1000;
+    transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+    
+    /* Remove default bg/border from parent, children handle it */
+    background: transparent;
+    border: none;
+    
+    /* Mobile Touch Optimization */
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Slide Down Trigger */
+.glass-nav.slide-in {
+    transform: translate(-50%, 0);
+}
+
+/* --- 3. THE FULL LIQUID BACKGROUND --- */
+.liquid-glass-bg {
+    position: absolute;
+    inset: 0; /* Fills 100% of the container */
+    border-radius: 50px;
+    z-index: 0; /* Sits behind text */
+
+    /* THE LIQUID EFFECT */
+    -webkit-backdrop-filter: url(#distortion);
+    backdrop-filter: url(#distortion);
+
+    /* Glass Color & Shine */
+    background: rgba(114, 114, 114, 0.15); 
+    box-shadow: 
+        inset 0 0 20px rgba(22, 22, 22, 0.2), /* Inner Glow */
+        0 10px 40px rgba(0, 0, 0, 0.3);        /* Drop Shadow */
+    
+    border: 1px solid rgba(53, 53, 53, 0.2);
+    pointer-events: none; /* Let clicks pass through to links */
+}
+
+/* --- 4. CONTENT STYLING --- */
+.glass-nav ul {
+    position: relative;
+    z-index: 10; /* Must be on top of liquid bg */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    white-space: nowrap; /* Prevents text from wrapping */
+}
+
+.glass-nav a {
+    text-decoration: none;
+    color: white;
+    font-family: "Bitcount Prop Single", sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    font-weight: 300;
+    
+    /* Text Shadow to make it pop against the distortion */
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    padding: 5px; /* Adds a small click area buffer */
+}
+
+.glass-nav a:hover {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+    opacity: 1;
+}
+
+/* --- 5. MOBILE RESPONSIVENESS --- */
+
+/* Tablets & Small Laptops */
+@media (max-width: 1024px) {
+    .glass-nav {
+        padding: 15px 30px;
+    }
+    .glass-nav ul {
+        gap: 30px;
+    }
+}
+
+/* Mobile Phones */
+@media (max-width: 768px) {
+    .glass-nav {
+        top: 20px; /* Move slightly up */
+        width: 85%; /* Take up most of the width but leave margins */
+        max-width: 400px; /* Don't get too wide on larger phones */
+        padding: 15px 10px; /* Reduce padding to fit content */
+        box-sizing: border-box;
+    }
+
+    .glass-nav ul {
+        width: 100%;
+        justify-content: space-evenly; /* Distribute links evenly */
+        gap: 0; /* Remove fixed gap, let space-evenly handle it */
+    }
+
+    .glass-nav a {
+        font-size: 0.95rem; /* Smaller text size */
+        letter-spacing: 0.5px;
+    }
+}
+
+/* Very Small Phones (Foldables/Old iPhones) */
+@media (max-width: 380px) {
+    .glass-nav a {
+        font-size: 0.8rem;
+    }
+}

@@ -1,0 +1,176 @@
+/* --- STATION SECTION --- */
+#station-section {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    overflow: hidden;
+}
+
+#station-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    outline: none;
+}
+
+.station-content {
+    position: absolute;
+    top: 15%; /* Adjusted slightly for better vertical balance */
+    left: 10%;
+    z-index: 2; 
+    pointer-events: none; /* Allows clicks to pass through to the 3D model */
+    max-width: 80%; /* Prevents text from hitting the right edge */
+}
+
+/* IMPORTANT: Re-enable clicks for the button inside the non-clickable container */
+.station-content button, 
+.station-content a {
+    pointer-events: auto;
+}
+
+.station-content h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 4rem;
+    color: white;
+    margin-bottom: 10px;
+    line-height: 1.1;
+}
+
+.station-content p {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.5rem;
+    color: #ccc;
+}
+
+/* --- STATION FOOTER (Split Layout) --- */
+#station-footer {
+    position: absolute;
+    bottom: 200px; /* High position for Desktop */
+    left: 0;
+    width: 100%;
+    z-index: 5;
+    
+    /* Flexbox Layout */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 60px; 
+    box-sizing: border-box;
+
+    /* Animation Settings */
+    opacity: 0;
+    transform: translateY(30px);
+    pointer-events: none;
+    transition: opacity 3s ease, transform 3s ease; 
+}
+
+/* Visible State */
+#station-footer.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* --- CAPSULE CONTAINERS (Left & Right) --- */
+.footer-left, .footer-right {
+    display: flex;
+    gap: 30px;
+    
+    /* Visual Container Styling */
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 20px;
+    padding: 12px 30px;
+    
+    /* Hover Transition */
+    transition: all 0.3s ease;
+}
+
+.footer-left:hover, .footer-right:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* --- TEXT & LINK STYLING --- */
+.footer-item, .footer-center span {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.9rem;
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+    white-space: nowrap; /* Prevents text breaking awkwardly */
+}
+
+.footer-item:hover {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+
+/* Tablet & Smaller Laptops */
+@media (max-width: 1024px) {
+    .station-content h2 {
+        font-size: 3rem;
+    }
+    #station-footer {
+        bottom: 100px; /* Lower on tablets */
+        padding: 0 40px;
+    }
+}
+
+/* Mobile Phones */
+@media (max-width: 768px) {
+    /* 1. Content Adjustment */
+    .station-content {
+        top: 15%;
+        left: 5%;
+        max-width: 90%;
+    }
+    .station-content h2 {
+        font-size: 2.5rem; /* Much smaller to fit phone screens */
+    }
+    .station-content p {
+        font-size: 1.1rem;
+    }
+
+    /* 2. Footer Layout Adjustment */
+    #station-footer {
+        flex-direction: column;
+        gap: 15px;
+        /* Move footer WAY down on mobile so it doesn't block the 3D model */
+        bottom: 30px; 
+        padding: 0 15px;
+        
+        transition: opacity 2s ease, transform 2s ease;
+    }
+    
+    /* 3. Capsule Adjustment */
+    .footer-left, .footer-right {
+        width: 100%; /* Full width bars */
+        justify-content: center;
+        flex-wrap: wrap; /* Allow wrapping if email/phone is too long */
+        gap: 15px;
+        padding: 12px 10px;
+        box-sizing: border-box;
+    }
+
+    /* 4. Text Adjustment */
+    .footer-item, .footer-center span {
+        font-size: 0.8rem;
+    }
+    
+    /* Hide copyright on mobile if it feels too cluttered (Optional) */
+    .footer-center {
+        margin-bottom: 10px;
+    }
+}

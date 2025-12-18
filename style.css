@@ -1,0 +1,668 @@
+/* --- 1. FONTS --- */
+@import url('https://fonts.googleapis.com/css2?family=Advent+Pro:ital,wght@0,100..900;1,100..900&family=Amatic+SC:wght@400;700&family=BBH+Bartle&family=Bitcount+Prop+Single:wght@100..900&family=Dosis:wght@200..800&family=Josefin+Slab:ital,wght@0,100..700;1,100..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Quicksand:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&display=swap');
+@import url(https://fonts.googleapis.com/css?family=Quattrocento+Sans);
+
+/* --- GLOBAL SCROLL SETTINGS --- */
+body {
+    margin: 0;
+    overflow-y: auto; 
+    overflow-x: hidden;
+    background-color: #000;
+    color: white;
+}
+
+/* --- INTRO OVERLAY --- */
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease-out;
+}
+
+#enter-btn {
+    padding: 20px 50px;
+    font-size: 1.9rem;
+    font-weight: bold;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    background-color: rgba(59, 59, 59, 0);
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    font-family: 'Quattrocento Sans', sans-serif;
+}
+
+#enter-btn:hover {
+    transform: scale(3);
+}
+
+/* --- 3D CANVAS (Fixed Background) --- */
+#canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+}
+
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 10000; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-text {
+    width: 100%;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+}
+
+.loading-text span {
+    display: inline-block;
+    margin: 0 5px;
+    color: #fff;
+    font-family: 'Quattrocento Sans', sans-serif;
+    font-size: 2rem;
+    filter: blur(0px);
+}
+
+.loading-text span:nth-child(1) { animation: blur-text 1.5s 0s infinite linear alternate; }
+.loading-text span:nth-child(2) { animation: blur-text 1.5s 0.2s infinite linear alternate; }
+.loading-text span:nth-child(3) { animation: blur-text 1.5s 0.4s infinite linear alternate; }
+.loading-text span:nth-child(4) { animation: blur-text 1.5s 0.6s infinite linear alternate; }
+.loading-text span:nth-child(5) { animation: blur-text 1.5s 0.8s infinite linear alternate; }
+.loading-text span:nth-child(6) { animation: blur-text 1.5s 1.0s infinite linear alternate; }
+.loading-text span:nth-child(7) { animation: blur-text 1.5s 1.2s infinite linear alternate; }
+
+@keyframes blur-text {
+    0% { filter: blur(0px); opacity: 1; }
+    100% { filter: blur(4px); opacity: 0.5; }
+}
+
+/* =========================================
+   SECTION 1: HERO (Full Screen)
+   ========================================= */
+#hero {
+    position: relative;
+    height: 100vh; 
+    width: 100%;
+    overflow: hidden;
+}
+
+.hero-content {
+    position: absolute;
+    top: 72%; 
+    left: 35%;
+    transform: translate(-50%, -50%);
+    text-align: left;
+    pointer-events: none;
+    width: 90%; 
+    max-width: 900px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+    z-index: 10;
+}
+
+.hero-content.visible {
+    opacity: 1;
+}
+
+/* --- HERO ANIMATION STYLES --- */
+.title-wrapper {
+    font-family: "Instrument Serif", sans-serif;
+    font-size: 6rem; 
+    font-weight: 370;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    line-height: 1;
+    color: white;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.title-line {
+    display: block;
+    overflow: hidden; 
+    padding-bottom: 5px; 
+    padding-right: 80px; 
+    margin-right: -80px; 
+}
+
+.title-line-inner {
+    display: block;
+    transform: translate(60px, 110%); 
+}
+
+@keyframes reveal-slide-up-left {
+    0% { transform: translate(60px, 110%); }
+    100% { transform: translate(0, 0); }
+}
+
+.hero-content.visible .title-line-inner {
+    animation: reveal-slide-up-left 3s cubic-bezier(0.6, 1, 0.3, 1) forwards;
+}
+
+.hero-content.visible .title-line:nth-child(2) .title-line-inner {
+    animation-delay: 0.1s;
+}
+
+/* --- SUBTITLE STYLING --- */
+.subtitle {
+    font-family: "Instrument Serif", sans-serif;
+    font-size: 2rem;
+    font-weight: 450;
+    color: #ffffff;
+    line-height: 1.2;
+    margin-top: 5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transform: translateY(20px); 
+    animation: fadeInSubtitle 2.5s ease-out forwards;
+    animation-delay: 4s; 
+}
+
+.hero-content.visible .subtitle {
+   animation-play-state: running;
+}
+
+@keyframes fadeInSubtitle {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- SCROLL INDICATOR --- */
+.scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0; 
+    transition: opacity 1s ease 3s; 
+    animation: bounce 2s infinite;
+}
+
+.hero-content.visible ~ .scroll-indicator {
+    opacity: 0.7;
+}
+
+.scroll-indicator span {
+    font-family: "Quicksand", sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
+    40% {transform: translateX(-50%) translateY(-10px);}
+    60% {transform: translateX(-50%) translateY(-5px);}
+}
+
+/* =========================================
+   SECTION 2: ABOUT
+   ========================================= */
+#about {
+    font-family: "Instrument Serif", sans-serif;
+    position: relative;
+    min-height: 80vh; 
+    width: 100%;
+    z-index: 10;
+    padding-top: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 50px;
+}
+
+#about::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 70%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 90%, transparent 100%);
+    z-index: -1; 
+    pointer-events: none; 
+}
+
+#about .container {
+    width: 80%;
+    max-width: 800px;
+    text-align: left;
+}
+
+#about h2 {
+    font-family: "Instrument Serif", sans-serif;
+    font-size: 3rem;
+    margin-bottom: 30px;
+    color: #fff;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 20px;
+}
+
+#about p {
+    font-family: "Instrument Serif", sans-serif;
+    font-size: 1.8rem;
+    line-height: 1.8;
+    color: #ccc;
+    margin-bottom: 30px;
+}
+
+/* =========================================
+   SECTION 3: ACCORDION SLIDER STYLES
+   ========================================= */
+#services-container {
+    background-color: #000000; 
+    z-index: 10;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#services-container .slider-container {
+    filter: url(#pixel-glitch-filter);
+    transition: opacity 0.1s linear;
+    will-change: filter, opacity;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+#services-container .now-showing {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    color: #9fff6b;
+    font-family: 'Bitcount Prop Single', sans-serif;
+    font-size: 25px;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 10;
+}
+
+#services-container .now-showing::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: #9fff6b;
+    border-radius: 50%;
+}
+
+#services-container .accordion-slider {
+    display: flex;
+    height: 100%;
+    position: relative;
+    width: 100%;
+}
+
+#services-container .slide {
+    flex: 1;
+    position: relative;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    filter: grayscale(1);
+    border-right: 1px solid rgba(0,0,0,0.5); 
+}
+
+#services-container .slide:hover {
+    filter: grayscale(0.5);
+}
+
+#services-container .slide.active {
+    flex: 3; 
+    filter: grayscale(0);
+}
+
+#services-container .slide::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.9) 90%);
+}
+
+#services-container .slide-content {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    right: 30px;
+    color: white;
+    z-index: 2;
+    overflow: visible;
+    padding-top: 400px;
+}
+
+#services-container .slide.active .slide-content {
+    bottom: 60px;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+}
+
+#services-container .slide-number {
+    font-size: 64px;
+    font-family: 'Instrument Serif', serif;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1;
+    position: absolute;
+    bottom: 30px;
+    left: 10px;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#services-container .slide.active .slide-number {
+    opacity: 0;
+    transform: translateY(-40px); 
+    pointer-events: none; 
+}
+
+#services-container .car-brand {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.8);
+    transform: rotate(-90deg);
+    transform-origin: left bottom;
+    position: absolute;
+    bottom: 100px;
+    left: 30px;
+    white-space: nowrap;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 0;
+}
+
+#services-container .slide.active .car-brand {
+    transform: rotate(0deg);
+    position: static;
+    margin-bottom: 0px;
+}
+
+#services-container .car-name {
+    font-size: 32px;
+    font-family: 'Instrument Serif', serif;
+    font-weight: 400;
+    margin-bottom: 8px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#services-container .slide.active .car-name {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.3s;
+}
+
+#services-container .car-subtitle {
+    font-size: 14px;
+    font-family: 'Quicksand', sans-serif;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#services-container .slide.active .car-subtitle {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.4s;
+}
+
+#services-container .car-specs {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#services-container .slide.active .car-specs {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.5s;
+}
+
+#services-container .spec-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-family: 'Quicksand', sans-serif;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 4px;
+}
+
+#services-container .spec-label { color: #aaa; }
+#services-container .spec-value { color: #fff; font-weight: bold; }
+
+#services-container .navigation-arrows {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 4;
+    backdrop-filter: blur(10px);
+}
+
+#services-container .nav-prev { left: 20px; }
+#services-container .nav-next { right: 20px; }
+#services-container .navigation-arrows:hover { background: rgba(255, 255, 255, 0.3); }
+
+#explore-btn {
+    margin-top: 20px;
+    padding: 12px 30px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+#explore-btn:hover {
+    background: white;
+    color: black;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+
+/* ==========================================================================
+   MOBILE & TABLET OPTIMIZATIONS
+   ========================================================================== */
+
+/* --- TABLETS (Up to 1024px) --- */
+@media (max-width: 1024px) {
+    .title-wrapper {
+        font-size: 4.5rem;
+    }
+    
+    .hero-content {
+        left: 50%; /* Center horizontally on tablet */
+        width: 80%;
+    }
+
+    #about h2 {
+        font-size: 2.5rem;
+    }
+    
+    #about p {
+        font-size: 1.5rem;
+    }
+}
+
+/* --- MOBILE PHONES (Up to 768px) --- */
+@media (max-width: 768px) {
+    
+    /* 1. HERO SECTION */
+    .title-wrapper {
+        font-size: 3rem; 
+        align-items: center; /* Center text alignment */
+    }
+    
+    .hero-content {
+        left: 50%;
+        top: 60%; /* Adjusted vertical centering */
+        width: 90%;
+        text-align: center;
+        transform: translate(-50%, -50%);
+    }
+
+    .title-line {
+        padding-right: 0;
+        margin-right: 0;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        margin-top: 10px;
+    }
+
+    #enter-btn {
+        padding: 15px 30px;
+        font-size: 1.5rem;
+    }
+
+    /* 2. ABOUT SECTION */
+    #about {
+        padding-top: 80px;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #about .container {
+        width: 90%;
+        text-align: center; /* Center align text on mobile */
+    }
+    
+    #about h2 {
+        font-size: 2rem;
+        text-align: center;
+    }
+    
+    #about p {
+        font-size: 1.2rem;
+        line-height: 1.6;
+    }
+
+    /* 3. ACCORDION SLIDER (Vertical Stack) */
+    #services-container .accordion-slider { 
+        flex-direction: column; /* Stack vertically */
+    }
+    
+    #services-container .slide { 
+        flex: 1; 
+        width: 100%; 
+        min-height: 60px; /* Thinner strips for inactive slides */
+        border-right: none;
+        border-bottom: 1px solid rgba(0,0,0,0.5);
+    }
+    
+    #services-container .slide.active { 
+        flex: 6; /* Active slide takes up most space */
+    }
+
+    /* Adjust Text Positioning for Vertical Layout */
+    #services-container .car-brand { 
+        transform: none; /* Reset rotation */
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        font-size: 12px;
+        margin-bottom: 0;
+    }
+    
+    #services-container .slide.active .car-brand {
+        position: static;
+        margin-bottom: 5px;
+    }
+    
+    /* Move Number to Right Side */
+    #services-container .slide-number {
+        font-size: 30px;
+        bottom: 20px;
+        right: 20px; 
+        left: auto;
+    }
+
+    /* Adjust Content Padding */
+    #services-container .slide-content {
+        padding-top: 50px; 
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+    }
+
+    #services-container .car-name {
+        font-size: 24px;
+    }
+
+    #services-container .car-subtitle {
+        font-size: 12px;
+        margin-bottom: 15px;
+    }
+    
+    /* Hide arrows on mobile to cleaner look */
+    #services-container .navigation-arrows {
+        display: none; 
+    }
+}
+
+/* --- SMALL MOBILE (Up to 480px) --- */
+@media (max-width: 480px) {
+    .title-wrapper {
+        font-size: 2.5rem;
+    }
+    
+    #about p {
+        font-size: 1.1rem;
+    }
+}
