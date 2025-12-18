@@ -1,5 +1,4 @@
 function initPuppy() { 
-    // Select the wrapper specifically inside the about section
     const wrapper = document.getElementById('dog-wrapper');
     if (!wrapper) return; 
 
@@ -8,6 +7,9 @@ function initPuppy() {
         wrapper: wrapper,
         dog: wrapper.querySelector('.dog'),
         marker: wrapper.querySelectorAll('.marker'),
+        // FIX: Select specific parts safely instead of relying on childNodes
+        head: wrapper.querySelector('.head'),
+        dogBody: wrapper.querySelector('.body')
     }
 
     const animationFrames = {
@@ -15,106 +17,45 @@ function initPuppy() {
     }
 
     const directionConversions = {
-        360: 'up',
-        45: 'upright',
-        90: 'right',
-        135: 'downright',
-        180: 'down',
-        225: 'downleft',
-        270: 'left',
-        315: 'upleft',
+        360: 'up', 45: 'upright', 90: 'right', 135: 'downright',
+        180: 'down', 225: 'downleft', 270: 'left', 315: 'upleft',
     }
 
     const angles = [360, 45, 90, 135, 180, 225, 270, 315]
     const defaultEnd = 4
     
     const partPositions = [
-        { //0
-        leg1: { x: 26, y: 43 },
-        leg2: { x: 54, y: 43 },
-        leg3: { x: 26, y: 75 },
-        leg4: { x: 54, y: 75 },
-        tail: { x: 40, y: 70, z: 1 },
-        }, 
-        { //1
-        leg1: { x: 33, y: 56 },
-        leg2: { x: 55, y: 56 },
-        leg3: { x: 12, y: 72 },
-        leg4: { x: 32, y: 74 },
-        tail: { x: 20, y: 64, z: 1 },
-        }, 
-        { //2
-        leg1: { x: 59, y: 62 },
-        leg2: { x: 44, y: 60 },
-        leg3: { x: 25, y: 64 },
-        leg4: { x: 11, y: 61 },
-        tail: { x: 4, y: 44, z: 1 },
-        }, 
-        { //3
-        leg1: { x: 39, y: 63 },
-        leg2: { x: 60, y: 56 },
-        leg3: { x: 12, y: 52 },
-        leg4: { x: 28, y: 50 },
-        tail: { x: 7, y: 21, z: 0 },
-        }, 
-        { //4
-        leg1: { x: 23, y: 54 },
-        leg2: { x: 56, y: 54 },
-        leg3: { x: 24, y: 25 },
-        leg4: { x: 54, y: 25 },
-        tail: { x: 38, y: 2, z: 0 },
-        }, 
-        { //5
-        leg1: { x: 21, y: 58 },
-        leg2: { x: 41, y: 64 },
-        leg3: { x: 53, y: 50 },
-        leg4: { x: 69, y: 53 },
-        tail: { x: 72, y: 22, z: 0 },
-        }, 
-        { //6
-        leg1: { x: 22, y: 59 },
-        leg2: { x: 30, y: 64 },
-        leg3: { x: 56, y: 60 },
-        leg4: { x: 68, y: 62 },
-        tail: { x: 78, y: 40, z: 0 },
-        }, 
-        { //7
-        leg1: { x: 47, y: 45 },
-        leg2: { x: 24, y: 53 },
-        leg3: { x: 68, y: 68 },
-        leg4: { x: 47, y: 73 },
-        tail: { x: 65, y: 65, z: 1 },
-        }, 
+        { leg1: { x: 26, y: 43 }, leg2: { x: 54, y: 43 }, leg3: { x: 26, y: 75 }, leg4: { x: 54, y: 75 }, tail: { x: 40, y: 70, z: 1 } }, 
+        { leg1: { x: 33, y: 56 }, leg2: { x: 55, y: 56 }, leg3: { x: 12, y: 72 }, leg4: { x: 32, y: 74 }, tail: { x: 20, y: 64, z: 1 } }, 
+        { leg1: { x: 59, y: 62 }, leg2: { x: 44, y: 60 }, leg3: { x: 25, y: 64 }, leg4: { x: 11, y: 61 }, tail: { x: 4, y: 44, z: 1 } }, 
+        { leg1: { x: 39, y: 63 }, leg2: { x: 60, y: 56 }, leg3: { x: 12, y: 52 }, leg4: { x: 28, y: 50 }, tail: { x: 7, y: 21, z: 0 } }, 
+        { leg1: { x: 23, y: 54 }, leg2: { x: 56, y: 54 }, leg3: { x: 24, y: 25 }, leg4: { x: 54, y: 25 }, tail: { x: 38, y: 2, z: 0 } }, 
+        { leg1: { x: 21, y: 58 }, leg2: { x: 41, y: 64 }, leg3: { x: 53, y: 50 }, leg4: { x: 69, y: 53 }, tail: { x: 72, y: 22, z: 0 } }, 
+        { leg1: { x: 22, y: 59 }, leg2: { x: 30, y: 64 }, leg3: { x: 56, y: 60 }, leg4: { x: 68, y: 62 }, tail: { x: 78, y: 40, z: 0 } }, 
+        { leg1: { x: 47, y: 45 }, leg2: { x: 24, y: 53 }, leg3: { x: 68, y: 68 }, leg4: { x: 47, y: 73 }, tail: { x: 65, y: 65, z: 1 } }, 
     ]
 
-    const control = {
-        x: null,
-        y: null,
-        angle: null,
-    }
+    const control = { x: null, y: null, angle: null }
 
     // SPEED SETTINGS
-    const distance = 15 // Smaller steps but faster interval for smoother movement
-    const runInterval = 30 // Run loop speed (Lower = Faster reaction)
-    const turnSpeed = 40   // Turning animation speed
-    const turnDelay = 80   // Delay between head and body turn
+    const distance = 15 
+    const runInterval = 30 
+    const turnSpeed = 40   
+    const turnDelay = 80   
 
     const nearestN = (x, n) => x === 0 ? 0 : (x - 1) + Math.abs(((x - 1) % n) - n)
     const px = num => `${num}px`
     const radToDeg = rad => Math.round(rad * (180 / Math.PI))
     const degToRad = deg => deg / (180 / Math.PI)
-    const overlap = (a, b) =>{
-        const buffer = 20
-        return Math.abs(a - b) < buffer
-    }
+    const overlap = (a, b) => Math.abs(a - b) < 20
 
     const rotateCoord = ({ angle, origin, x, y }) =>{
         const a = degToRad(angle)
         const aX = x - origin.x
         const aY = y - origin.y
         return {
-        x: (aX * Math.cos(a)) - (aY * Math.sin(a)) + origin.x,
-        y: (aX * Math.sin(a)) + (aY * Math.cos(a)) + origin.y,
+            x: (aX * Math.cos(a)) - (aY * Math.sin(a)) + origin.x,
+            y: (aX * Math.sin(a)) + (aY * Math.cos(a)) + origin.y,
         }
     }
 
@@ -131,17 +72,12 @@ function initPuppy() {
         return nearestN(adjustedAngle, 45)
     }
 
-    const reachedTheGoalYeah = (x, y) =>{
-        return overlap(control.x , x) && overlap(control.y, y)
-    }
+    const reachedTheGoalYeah = (x, y) => overlap(control.x , x) && overlap(control.y, y)
 
     const positionLegs = (dog, frame) => {
         ;[5, 7, 9, 11].forEach((n, i) => {
-        const { x, y } = partPositions[frame][`leg${i + 1}`]
-        setStyles({
-            target: dog.childNodes[n],
-            x: px(x), y: px(y),
-        })
+            const { x, y } = partPositions[frame][`leg${i + 1}`]
+            setStyles({ target: dog.childNodes[n], x: px(x), y: px(y) })
         })
     }
 
@@ -156,10 +92,7 @@ function initPuppy() {
     }
 
     const positionTail = (dog, frame) => { 
-        setStyles({
-        target: dog.childNodes[13],
-        x: px(partPositions[frame].tail.x), y: px(partPositions[frame].tail.y),
-        })
+        setStyles({ target: dog.childNodes[13], x: px(partPositions[frame].tail.x), y: px(partPositions[frame].tail.y) })
         dog.childNodes[13].style.zIndex = partPositions[frame].tail.z
         dog.childNodes[13].childNodes[1].classList.add('wag')
     }
@@ -168,49 +101,42 @@ function initPuppy() {
         const offset = direction === 'clockwise' ? 1 : -1
 
         target.style.transform = `translateX(${px(data.animation[currentFrame][0] * -frameW)})`
+        
         if (part === 'body') {
-        positionLegs(data.dog, currentFrame)
-        moveLegs(data.dog)
-        positionTail(data.dog, currentFrame) 
+            positionLegs(data.dog, currentFrame)
+            moveLegs(data.dog)
+            positionTail(data.dog, currentFrame) 
         } else {
-        target.parentNode.classList.add('happy')
+            target.parentNode.classList.add('happy')
         }
+        
         data.angle = angles[currentFrame]
         data.index = currentFrame
 
-    target.parentNode.classList[data.animation[currentFrame][1] === 'f' ? 'add' : 'remove']('flip')
+        // Handle Flip
+        target.parentNode.classList[data.animation[currentFrame][1] === 'f' ? 'add' : 'remove']('flip')
 
         let nextFrame = currentFrame + offset
-        nextFrame = nextFrame === -1 
-        ? data.animation.length - 1
-        : nextFrame === data.animation.length
-            ? 0
-            : nextFrame
+        nextFrame = nextFrame === -1 ? data.animation.length - 1 : nextFrame === data.animation.length ? 0 : nextFrame
+        
         if (currentFrame !== end) {
-        data.timer[part] = setTimeout(()=> animateDog({
-            target, data, part, frameW, 
-            currentFrame: nextFrame, end, direction,
-            speed,
-        }), speed || 150)
+            data.timer[part] = setTimeout(()=> animateDog({
+                target, data, part, frameW, 
+                currentFrame: nextFrame, end, direction, speed,
+            }), speed || 150)
         } else if (part === 'body') {
-        // end
-        control.angle = angles[end]
-        data.walk = true
-        setTimeout(()=> {
-            stopLegs(data.dog)
-        }, 100) // Fast stop
-        setTimeout(()=> {
-            document.querySelector('.happy')?.classList.remove('happy')
-        }, 5000)
+            control.angle = angles[end]
+            data.walk = true
+            setTimeout(()=> { stopLegs(data.dog) }, 100) 
+            setTimeout(()=> { document.querySelector('.happy')?.classList.remove('happy') }, 5000)
         }
     }
 
     const triggerDogAnimation = ({ target, frameW, start, end, data, speed, part, direction }) => {
         clearTimeout(data.timer[part])
         data.timer[part] = setTimeout(()=> animateDog({
-        target, data, part, frameW,
-        currentFrame: start, end, direction,
-        speed,
+            target, data, part, frameW,
+            currentFrame: start, end, direction, speed,
         }), speed || 150)
     }
 
@@ -219,43 +145,47 @@ function initPuppy() {
         const dy1 = pos.y - target.y
         const dx1 = target.x - pos.x
         const dy2 = pos.y - facing.y
-
         return dx2 * dy1 > dx1 * dy2 ? 'anti-clockwise' : 'clockwise'
     }
 
     const turnDog = ({ dog, start, end, direction }) => {
+        // FIX: Ensure we select the Head and Body Images specifically
+        // childNodes are unreliable if HTML spacing changes
+        const headImg = elements.head;
+        const bodyImg = elements.dogBody;
+
+        if(!headImg || !bodyImg) return; // Safety check
+
         triggerDogAnimation({ 
-        target: dog.dog.childNodes[3].childNodes[1],
-        frameW: 31 * 2,
-        start, end,
-        data: dog,
-        speed: turnSpeed, // Faster turn
-        direction,
-        part: 'head'
+            target: headImg,
+            frameW: 31 * 2,
+            start, end, data: dog,
+            speed: turnSpeed, 
+            direction, part: 'head'
         }) 
         
-        setTimeout(()=>{
-        triggerDogAnimation({ 
-            target: dog.dog.childNodes[1].childNodes[1],
-            frameW: 48 * 2,
-            start, end,
-            data: dog,
-            speed: turnSpeed, // Faster body follow
-            direction,
-            part: 'body'
-        }) 
-        }, turnDelay) // Faster delay
+        // FIX: Clear the previous body delay timer so animations don't crash into each other
+        clearTimeout(dog.timer.bodyDelay);
+        
+        dog.timer.bodyDelay = setTimeout(()=>{
+            triggerDogAnimation({ 
+                target: bodyImg,
+                frameW: 48 * 2,
+                start, end, data: dog,
+                speed: turnSpeed, 
+                direction, part: 'body'
+            }) 
+        }, turnDelay) 
     }
 
     const createDog = () => {
         const { dog } = elements
         const { width, height } = dog.getBoundingClientRect()
         
-        // DYNAMIC CENTERING: Calculate center based on container size
         const containerWidth = elements.body.clientWidth;
         const containerHeight = elements.body.clientHeight;
         const centerX = (containerWidth / 2) - (width / 2);
-        const centerY = (containerHeight / 5) - (height / 5);
+        const centerY = (containerHeight / 2) - (height / 2);
 
         dog.style.left = px(centerX); 
         dog.style.top = px(centerY);
@@ -264,32 +194,21 @@ function initPuppy() {
         const index = 0
 
         const dogData = {
-        timer: {
-            head: null, body: null, all: null,
-        },
-        pos: {
-            x: centerX + (width / 2),
-            y: centerY + (height / 2),
-        },
-        actualPos: {
-            x: centerX,
-            y: centerY,
-        },
-        facing: {
-            x: centerX + (width / 2),
-            y: centerY + (height / 2) + 30,
-        },
-        animation: animationFrames.rotate,
-        angle: 360,
-        index,
-        dog,
+            timer: { head: null, body: null, all: null, bodyDelay: null }, // Added bodyDelay
+            pos: { x: centerX + (width / 2), y: centerY + (height / 2) },
+            actualPos: { x: centerX, y: centerY },
+            facing: { x: centerX + (width / 2), y: centerY + (height / 2) + 30 },
+            animation: animationFrames.rotate,
+            angle: 360,
+            index,
+            dog,
         }
         elements.dog = dogData
 
         turnDog({
-        dog: dogData,
-        start: index, end: defaultEnd,
-        direction: 'clockwise'
+            dog: dogData,
+            start: index, end: defaultEnd,
+            direction: 'clockwise'
         })
         positionTail(dog, 0)
     }
@@ -298,92 +217,81 @@ function initPuppy() {
         const lowerLimit = -40 
         const upperLimit = 40
         if (x > lowerLimit && x < (elements.body.clientWidth - upperLimit)){
-        dogData.pos.x = x + 48
-        dogData.actualPos.x = x
+            dogData.pos.x = x + 48
+            dogData.actualPos.x = x
         } 
         if (y > lowerLimit && y < (elements.body.clientHeight - upperLimit)){
-        dogData.pos.y = y + 48
-        dogData.actualPos.y = y
+            dogData.pos.y = y + 48
+            dogData.actualPos.y = y
         }
         dog.style.left = px(x)
         dog.style.top = px(y)
     }
 
     const positionMarker = (i, pos) => {
-        elements.marker[i].style.left = px(pos.x)
-        elements.marker[i].style.top = px(pos.y)
+        if(elements.marker[i]) {
+            elements.marker[i].style.left = px(pos.x)
+            elements.marker[i].style.top = px(pos.y)
+        }
     }
 
     const moveDog = () =>{
-        clearInterval(elements.dog.timer.all)
+        if (elements.dog.timer.all) return;
+
         const { dog } = elements.dog
 
         elements.dog.timer.all = setInterval(()=> {
-        const currentLeft = parseFloat(dog.style.left);
-        const currentTop = parseFloat(dog.style.top);
-        
-        const start = angles.indexOf(elements.dog.angle)
-        const end = angles.indexOf(targetAngle(elements.dog))
+            const currentLeft = parseFloat(dog.style.left);
+            const currentTop = parseFloat(dog.style.top);
+            
+            const start = angles.indexOf(elements.dog.angle)
+            const end = angles.indexOf(targetAngle(elements.dog))
 
-        // stop dog
-        if (reachedTheGoalYeah(currentLeft + 48, currentTop + 48)) {
-            clearInterval(elements.dog.timer.all)
-            const { x, y } = elements.dog.actualPos
-            dog.style.left = px(x)
-            dog.style.top = px(y)
-            stopLegs(dog)
-            turnDog({
-            dog: elements.dog,
-            start,
-            end: defaultEnd,
-            direction: 'clockwise'
-            })
-            return
-        }
-
-        let { x, y } = elements.dog.actualPos
-        const dir = directionConversions[targetAngle(elements.dog)]
-        if (dir !== 'up' && dir !== 'down') x += (dir.includes('left')) ? -distance : distance
-        if (dir !== 'left' && dir !== 'right') y += (dir.includes('up')) ? -distance : distance
-
-        positionMarker(0, elements.dog.pos)
-        positionMarker(1, control)
-
-        const { x: x2, y: y2 } = rotateCoord({
-            angle: elements.dog.angle,
-            origin: elements.dog.pos, 
-            x: elements.dog.pos.x,
-            y: elements.dog.pos.y - 100,
-        })
-        elements.dog.facing.x = x2
-        elements.dog.facing.y = y2
-        positionMarker(2, elements.dog.facing)
-
-        if (start === end) {
-            elements.dog.turning = false
-        }
-
-        if (!elements.dog.turning && elements.dog.walk) {
-            if (start !== end) {
-            elements.dog.turning = true
-
-            const direction = getDirection({ 
-                pos: elements.dog.pos,
-                facing: elements.dog.facing,
-                target: control,
-            })
-            turnDog({
-                dog: elements.dog,
-                start, end, direction,
-            })
-            } else {
-            checkBoundaryAndUpdateDogPos(x, y, dog, elements.dog)
-            moveLegs(dog)
+            if (reachedTheGoalYeah(currentLeft + 48, currentTop + 48)) {
+                clearInterval(elements.dog.timer.all)
+                elements.dog.timer.all = null; 
+                const { x, y } = elements.dog.actualPos
+                dog.style.left = px(x)
+                dog.style.top = px(y)
+                stopLegs(dog)
+                turnDog({ dog: elements.dog, start, end: defaultEnd, direction: 'clockwise' })
+                return
             }
-        }
-        }, runInterval) // FASTER REACTION SPEED
-    }
 
+            let { x, y } = elements.dog.actualPos
+            const dir = directionConversions[targetAngle(elements.dog)]
+            if (dir !== 'up' && dir !== 'down') x += (dir.includes('left')) ? -distance : distance
+            if (dir !== 'left' && dir !== 'right') y += (dir.includes('up')) ? -distance : distance
+
+            positionMarker(0, elements.dog.pos)
+            positionMarker(1, control)
+
+            const { x: x2, y: y2 } = rotateCoord({
+                angle: elements.dog.angle,
+                origin: elements.dog.pos, 
+                x: elements.dog.pos.x,
+                y: elements.dog.pos.y - 100,
+            })
+            elements.dog.facing.x = x2
+            elements.dog.facing.y = y2
+            positionMarker(2, elements.dog.facing)
+
+            if (start === end) { elements.dog.turning = false }
+
+            if (!elements.dog.turning && elements.dog.walk) {
+                if (start !== end) {
+                    elements.dog.turning = true
+                    const direction = getDirection({ 
+                        pos: elements.dog.pos, facing: elements.dog.facing, target: control,
+                    })
+                    turnDog({ dog: elements.dog, start, end, direction })
+                } else {
+                    checkBoundaryAndUpdateDogPos(x, y, dog, elements.dog)
+                    moveLegs(dog)
+                }
+            }
+        }, runInterval) 
+    }
 
     createDog()
 
@@ -393,52 +301,44 @@ function initPuppy() {
         control.angle = null
 
         const direction = getDirection({ 
-        pos: dog.pos,
-        facing: dog.facing,
-        target: control,
+            pos: dog.pos, facing: dog.facing, target: control,
         })
 
         const start = angles.indexOf(dog.angle)
         const end = angles.indexOf(targetAngle(dog))
-        turnDog({
-        dog,
-        start, end, direction
-        })
+        turnDog({ dog, start, end, direction })
     }
 
-    // --- INTERACTION HANDLER (Unified Touch & Mouse) ---
     const updateControlPosition = (clientX, clientY) => {
         const rect = elements.body.getBoundingClientRect();
         control.x = clientX - rect.left;
         control.y = clientY - rect.top;
     }
 
-    // MOUSE EVENTS
+    // EVENT LISTENERS
     elements.body.addEventListener('mousemove', e => {
         updateControlPosition(e.clientX, e.clientY);
         triggerTurnDog();
+        moveDog(); 
     });
-    elements.body.addEventListener('click', () => {
-        moveDog();
-    });
+    
+    elements.body.addEventListener('click', () => { moveDog(); });
 
-    // TOUCH EVENTS (Mobile Support)
     elements.body.addEventListener('touchstart', e => {
-        // Prevent scrolling when touching the dog container
         if(e.target === elements.body || elements.body.contains(e.target)) {
-             // e.preventDefault(); // Optional: Uncomment if you want to block scroll inside box
+             // e.preventDefault(); 
         }
         const touch = e.touches[0];
         updateControlPosition(touch.clientX, touch.clientY);
         triggerTurnDog();
-        moveDog(); // Mobile users usually want instant movement on tap
+        moveDog(); 
     }, { passive: false });
 
     elements.body.addEventListener('touchmove', e => {
-        // e.preventDefault(); // Uncomment if you want the dog to follow drag without scrolling
         const touch = e.touches[0];
         updateControlPosition(touch.clientX, touch.clientY);
         triggerTurnDog();
+        moveDog(); 
     }, { passive: false });
 }
   
