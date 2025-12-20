@@ -3,8 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Iðunn Loom</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="station.css">
+    <link rel="stylesheet" href="puppy-anim/puppy.css">
+
+    <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/gsap@3.12.5/dist/Flip.min.js"></script>
+    
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+
+    <style>
+        /* 2. REQUIRED CSS FOR SMOOTH SCROLL */
+        html.lenis, html.lenis body {
+            height: auto;
+        }
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+    </style>
 </head>
 <body>
     
@@ -50,101 +78,107 @@
             </div>
         </section>
 
-<section id="about">
-    <div id="dog-wrapper">
-        <div class="dog">
-            <div class="body-wrapper">
-                <div class="body img-bg"></div>
+        <section id="about-gallery-section">
+            <div class="gallery-wrap">
+                <div class="gallery gallery--bento gallery--switch" id="gallery-8">
+                    <div class="gallery__item"><img src="images/artifacts.png" alt="Artifacts" /></div>
+                    <div class="gallery__item"><img src="images/brandstrat.png" alt="Brand Strategy" /></div>
+                    <div class="gallery__item"><img src="images/digitalmarketing.png" alt="Digital Marketing" /></div>
+                    <div class="gallery__item"><img src="images/sectionback.png" alt="Background" /></div>
+                    <div class="gallery__item"><img src="images/video editing.png" alt="Video Editing" /></div>
+                    <div class="gallery__item"><img src="images/webdev.png" alt="Web Development" /></div>
+                    <div class="gallery__item"><img src="images/artifacts.png" alt="Artifacts" /></div>
+                    <div class="gallery__item"><img src="images/brandstrat.png" alt="Brand Strategy" /></div>
+                </div>
             </div>
-            <div class="head-wrapper">
-                <div class="head img-bg"></div>
-            </div>
-            <div class="leg-wrapper">
-                <div class="leg one img-bg"></div>
-            </div>
-            <div class="leg-wrapper">
-                <div class="leg two img-bg"></div>
-            </div>
-            <div class="leg-wrapper">
-                <div class="leg three img-bg"></div>
-            </div>
-            <div class="leg-wrapper">
-                <div class="leg four img-bg"></div>
-            </div>
-            <div class="tail-wrapper">
-                <div class="tail img-bg"></div>
-            </div>
-        </div>
-        
-        <div class="marker red d-none"></div>
-        <div class="marker green d-none"></div>
-        <div class="marker blue d-none"></div>
-    </div>
 
-<div class="container" style="position: relative; z-index: 5; pointer-events: none;">
-    <h2>The Unseen Thread</h2>
-    <p>
-        Growth doesn’t happen by accident. Behind every brand that dominates attention,
-        there’s a system quietly doing the work. We focus on the connective tissue —
-        the strategy, positioning, and insight that holds your brand together when the
-        spotlight hits.
+<div class="about-text-content">
+    <h2 class="ml5">The Unseen Thread</h2>
+    
+    <p class="animate-text">
+        What looks effortless on the surface is usually the resultM<br/> 
+        of clear thinking and deliberate design underneath.
     </p>
-    <p>
-        At Idunn Loom, we weave data, culture, and creative into a unified narrative that
-        feels intentional, current, and unmistakably human. While others chase volume,
-        we build signal — the kind that earns trust, drives action, and scales with purpose.
+    
+    <p class="animate-text">
+        At Idunn Loom, we shape brands by aligning insight, creativity, and culture <br/>
+        into a presence that feels modern and human.    
+    </p>
+
+    <p class="animate-text">
+        The focus is simple: clarity over clutter, impact over excess, and growth that lasts.
     </p>
 </div>
-
-</section>
+        </section>
         
         <section id="services-container"></section>
 
-<section id="station-section">
-    <div class="station-content">
-        <h2>The Next Frontier</h2>
-        <p>Experience the architecture of tomorrow.</p>
-        <button id="explore-btn">Thrusters</button>
-    </div>
+        <section id="station-section">
+            <div class="station-content">
+                <h2>The Next Frontier</h2>
+                <p>Experience the architecture of tomorrow.</p>
+                <button id="explore-btn">Thrusters</button>
+            </div>
 
-    <div id="station-footer" class="hidden-footer">
-        
-        <div class="footer-left">
-            <a href="mailto:contact@luminite.com" class="footer-item">prisilmjesin@gmail.com</a>
-            <a href="tel:+919876543210" class="footer-item">+91 9962993245</a>
-        </div>
+            <div id="station-footer" class="hidden-footer">
+                <div class="footer-left">
+                    <a href="mailto:contact@luminite.com" class="footer-item">prisilmjesin@gmail.com</a>
+                    <a href="tel:+919876543210" class="footer-item">+91 9962993245</a>
+                </div>
+                <div class="footer-center">
+                    <span></span>
+                </div>
+                <div class="footer-right">
+                    <a href="#" class="footer-item">Projects</a>
+                    <a href="https://linkedin.com" target="_blank" class="footer-item">LinkedIn</a>
+                </div>
+            </div>
 
-        <div class="footer-center">
-            <span></span>
-        </div>
-
-        <div class="footer-right">
-            <a href="#" class="footer-item">Projects</a>
-            <a href="https://linkedin.com" target="_blank" class="footer-item">LinkedIn</a>
-        </div>
-    </div>
-
-    <canvas id="station-canvas"></canvas>
-</section>
+            <canvas id="station-canvas"></canvas>
+        </section>
 
     </main>
 
     <script type="importmap">
         { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
     </script>
-    <link rel="stylesheet" href="puppy-anim/puppy.css">
+    
     <script type="module" src="station.js"></script>
     <script src="puppy-anim/puppy.js"></script>
     <script src="navbar.js"></script>
     <script type="module" src="script.js"></script>
     <script src="services-anim/servicesection.js"></script>
+    <script src="about-gallery.js"></script>
+    <script src="https://unpkg.com/split-type"></script>
+    <script src="text-anim.js"></script>
+
+    <script>
+        // Initialize Lenis
+        const lenis = new Lenis({
+            duration: 1.2, // Speed of scroll (higher = smoother/slower)
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Linear ease
+            smooth: true
+        });
+
+        // Synchronize Lenis with GSAP ScrollTrigger
+        lenis.on('scroll', ScrollTrigger.update);
+
+        // Add Lenis's requestAnimationFrame to GSAP's ticker
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+
+        // Disable GSAP's default lag smoothing to avoid jitters
+        gsap.ticker.lagSmoothing(0);
+    </script>
+
     <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
-  <defs>
-    <filter id="pixel-glitch-filter" x="-20%" y="-20%" width="140%" height="140%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" result="noise" />
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" id="displacement-map" />
-    </filter>
-  </defs>
-</svg> 
+        <defs>
+            <filter id="pixel-glitch-filter" x="-20%" y="-20%" width="140%" height="140%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" id="displacement-map" />
+            </filter>
+        </defs>
+    </svg> 
 </body>
 </html>
