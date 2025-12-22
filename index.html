@@ -8,30 +8,22 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="station.css">
     <link rel="stylesheet" href="puppy-anim/puppy.css">
+    <link rel="stylesheet" href="gallery-anim.css">
+    <link rel="stylesheet" href="rollstyle.css">
 
     <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/gsap@3.12.5/dist/Flip.min.js"></script>
-    
     <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+    <script src="https://unpkg.com/split-type"></script>
 
     <style>
-        /* 2. REQUIRED CSS FOR SMOOTH SCROLL */
-        html.lenis, html.lenis body {
-            height: auto;
-        }
-        .lenis.lenis-smooth {
-            scroll-behavior: auto !important;
-        }
-        .lenis.lenis-smooth [data-lenis-prevent] {
-            overscroll-behavior: contain;
-        }
-        .lenis.lenis-stopped {
-            overflow: hidden;
-        }
-        .lenis.lenis-scrolling iframe {
-            pointer-events: none;
-        }
+        /* REQUIRED CSS FOR SMOOTH SCROLL */
+        html.lenis, html.lenis body { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+        .lenis.lenis-scrolling iframe { pointer-events: none; }
     </style>
 </head>
 <body>
@@ -53,6 +45,7 @@
     <div id="canvas-container"></div>
 
     <main>
+        
         <section id="hero">
             <div class="hero-content">
                 <div class="title-wrapper">
@@ -78,41 +71,47 @@
             </div>
         </section>
 
-        <section id="about-gallery-section">
-            <div class="gallery-wrap">
-                <div class="gallery gallery--bento gallery--switch" id="gallery-8">
-                    <div class="gallery__item"><img src="images/artifacts.png" alt="Artifacts" /></div>
-                    <div class="gallery__item"><img src="images/brandstrat.png" alt="Brand Strategy" /></div>
-                    <div class="gallery__item"><img src="images/digitalmarketing.png" alt="Digital Marketing" /></div>
-                    <div class="gallery__item"><img src="images/sectionback.png" alt="Background" /></div>
-                    <div class="gallery__item"><img src="images/video editing.png" alt="Video Editing" /></div>
-                    <div class="gallery__item"><img src="images/webdev.png" alt="Web Development" /></div>
-                    <div class="gallery__item"><img src="images/artifacts.png" alt="Artifacts" /></div>
-                    <div class="gallery__item"><img src="images/brandstrat.png" alt="Brand Strategy" /></div>
-                </div>
-            </div>
-
-<div class="about-text-content">
-    <h2 class="ml5">The Unseen Thread</h2>
+<section class="split-section main-container">
     
-    <p class="animate-text">
-        What looks effortless on the surface is usually the resultM<br/> 
-        of clear thinking and deliberate design underneath.
-    </p>
-    
-    <p class="animate-text">
-        At Idunn Loom, we shape brands by aligning insight, creativity, and culture <br/>
-        into a presence that feels modern and human.    
-    </p>
+    <div class="roll-left">
+        <div class="roll-text-wrapper">
+            <a href="#" class="word" aria-label="Horizon">
+                <span aria-hidden="true" style="--i:0">H</span><span aria-hidden="true" style="--i:1">o</span><span aria-hidden="true" style="--i:2">r</span><span aria-hidden="true" style="--i:3">i</span><span aria-hidden="true" style="--i:4">z</span><span aria-hidden="true" style="--i:5">o</span><span aria-hidden="true" style="--i:6">n</span>
+            </a>
+            <a href="#" class="word" aria-label="Craft">
+                <span aria-hidden="true" style="--i:0">C</span><span aria-hidden="true" style="--i:1">r</span><span aria-hidden="true" style="--i:2">a</span><span aria-hidden="true" style="--i:3">f</span><span aria-hidden="true" style="--i:4">t</span>
+            </a>
+            <a href="#" class="word" aria-label="Vision">
+                <span aria-hidden="true" style="--i:0">V</span><span aria-hidden="true" style="--i:1">i</span><span aria-hidden="true" style="--i:2">s</span><span aria-hidden="true" style="--i:3">i</span><span aria-hidden="true" style="--i:4">o</span><span aria-hidden="true" style="--i:5">n</span>
+            </a>
+            <a href="#" class="word" aria-label="Legacy">
+                <span aria-hidden="true" style="--i:0">L</span><span aria-hidden="true" style="--i:1">e</span><span aria-hidden="true" style="--i:2">g</span><span aria-hidden="true" style="--i:3">a</span><span aria-hidden="true" style="--i:4">c</span><span aria-hidden="true" style="--i:5">y</span>
+            </a>
+        </div>
+    </div>
 
-    <p class="animate-text">
-        The focus is simple: clarity over clutter, impact over excess, and growth that lasts.
-    </p>
-</div>
-        </section>
-        
+    <div class="roll-right">
+        <div role="button" class="glow-card">
+          <span class="glow"></span>
+          <div>
+            <span>cool</span>Glowing shadows
+          </div>
+        </div>
+    </div>
+
+    <script>
+        if (typeof window.CSS.registerProperty === 'function') {
+            document.body.style.setProperty('--supported', 1);
+            document.body.classList.add('registerProperty-supported');
+        } else {
+            document.body.style.setProperty('--not-supported', 1);
+            document.body.classList.add('registerProperty-not-supported');
+        }
+    </script>
+
+</section>
+
         <section id="services-container"></section>
-
         <section id="station-section">
             <div class="station-content">
                 <h2>The Next Frontier</h2>
@@ -149,26 +148,22 @@
     <script type="module" src="script.js"></script>
     <script src="services-anim/servicesection.js"></script>
     <script src="about-gallery.js"></script>
-    <script src="https://unpkg.com/split-type"></script>
     <script src="text-anim.js"></script>
 
     <script>
         // Initialize Lenis
         const lenis = new Lenis({
-            duration: 1.2, // Speed of scroll (higher = smoother/slower)
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Linear ease
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
             smooth: true
         });
 
-        // Synchronize Lenis with GSAP ScrollTrigger
         lenis.on('scroll', ScrollTrigger.update);
 
-        // Add Lenis's requestAnimationFrame to GSAP's ticker
         gsap.ticker.add((time) => {
             lenis.raf(time * 1000);
         });
 
-        // Disable GSAP's default lag smoothing to avoid jitters
         gsap.ticker.lagSmoothing(0);
     </script>
 

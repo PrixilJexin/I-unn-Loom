@@ -221,74 +221,6 @@ body {
     60% {transform: translateX(-50%) translateY(-5px);}
 }
 
-/* =========================================
-   ABOUT SECTION (GSAP Gallery)
-   ========================================= */
-
-#about-gallery-section {
-    color: white;
-    position: relative;
-    z-index: 10;
-}
-
-.gallery-wrap {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.gallery {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    flex: none;
-}
-
-.gallery__item {
-    background-position: 50% 50%;
-    background-size: cover;
-    flex: none;
-    position: relative;
-}
-
-.gallery__item img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-/* --- BENTO GRID LAYOUT --- */
-.gallery--bento {
-    display: grid;
-    gap: 2vh;
-    /* Desktop Grid */
-    grid-template-columns: repeat(3, 32.5vw);
-    grid-template-rows: repeat(4, 23vh);
-    justify-content: center;
-    align-content: center;
-}
-
-/* Final Expanded State (Used by GSAP Flip) */
-.gallery--final.gallery--bento {
-    grid-template-columns: repeat(3, 100vw);
-    grid-template-rows: repeat(4, 49.5vh);
-    gap: 1vh;
-}
-
-/* Grid Positioning */
-.gallery--bento .gallery__item:nth-child(1) { grid-area: 1 / 1 / 3 / 2; }
-.gallery--bento .gallery__item:nth-child(2) { grid-area: 1 / 2 / 2 / 3; }
-.gallery--bento .gallery__item:nth-child(3) { grid-area: 2 / 2 / 4 / 3; }
-.gallery--bento .gallery__item:nth-child(4) { grid-area: 1 / 3 / 3 / 3; }
-.gallery--bento .gallery__item:nth-child(5) { grid-area: 3 / 1 / 3 / 2; }
-.gallery--bento .gallery__item:nth-child(6) { grid-area: 3 / 3 / 5 / 4; }
-.gallery--bento .gallery__item:nth-child(7) { grid-area: 4 / 1 / 5 / 2; }
-.gallery--bento .gallery__item:nth-child(8) { grid-area: 4 / 2 / 5 / 3; }
 
 /* --- TEXT CONTENT --- */
 .about-text-content {
@@ -372,11 +304,6 @@ body {
 @media (max-width: 768px) {
     /* Stack grid for mobile initially if desired, 
        but FLIP works best if we keep the grid structure slightly visible */
-    
-    .gallery--bento {
-        grid-template-columns: repeat(3, 32vw); /* Slightly tighter on mobile */
-        gap: 0.5vh;
-    }
 
     .about-text-content {
         padding: 3rem 5%;
@@ -640,22 +567,14 @@ body {
 
 /* --- TABLETS (Up to 1024px) --- */
 @media (max-width: 1024px) {
-    /* 1. HERO SECTION */
     .title-wrapper {
         font-size: 4.5rem;
     }
     
     .hero-content {
-        left: 50%; /* Center horizontally */
-        transform: translate(-50%, -50%); /* Ensure true centering */
+        left: 50%; 
+        transform: translate(-50%, -50%); 
         width: 80%;
-    }
-
-    /* 2. ABOUT SECTION */
-    /* Ensure Bento Grid adjusts for tablets */
-    .gallery--bento {
-        gap: 1.5vh;
-        grid-template-rows: repeat(4, 20vh); 
     }
     
     .about-text-content {
@@ -671,19 +590,20 @@ body {
     }
 }
 
+
 /* --- MOBILE PHONES (Up to 768px) --- */
 @media (max-width: 768px) {
     
     /* 1. HERO SECTION */
     .title-wrapper {
         font-size: 3rem; 
-        align-items: center; /* Center flex items */
+        align-items: center; 
         width: 100%;
     }
     
     .hero-content {
         left: 50%;
-        top: 50%; 
+        top: 65%; 
         width: 90%;
         text-align: center;
         transform: translate(-50%, -50%);
@@ -692,7 +612,7 @@ body {
     .title-line {
         padding-right: 0;
         margin-right: 0;
-        justify-content: center; /* Center inner text */
+        justify-content: center;
         display: flex;
     }
 
@@ -701,20 +621,10 @@ body {
         margin-top: 20px;
     }
 
-    /* 2. ABOUT SECTION (Bento Grid & Text) */
-    .gallery-wrap {
-        height: 100dvh; /* Use dynamic viewport height */
-    }
-
-    .gallery--bento {
-        gap: 0.8vh;
-        grid-template-columns: repeat(3, 31vw);
-        grid-template-rows: repeat(4, 18vh);
-    }
 
     .about-text-content {
         padding: 2rem 5%;
-        background: rgba(0, 0, 0, 0.85); /* Slightly darker for readability */
+        background: rgba(0, 0, 0, 0.85); 
     }
 
     .about-text-content h2 {
@@ -726,7 +636,12 @@ body {
         font-size: 1rem;
         line-height: 1.5;
         margin-bottom: 1.5rem;
-        text-align: justify; /* Keep justified for cleanness */
+        text-align: justify; 
+    }
+
+    #particle-container {
+        height: 80px; 
+        margin-top: 20px;
     }
 
     /* Adjust Particle Canvas */
@@ -735,28 +650,41 @@ body {
         margin-top: 20px;
     }
 
-    /* 3. SERVICES SECTION (Vertical Accordion) */
-    /* This overrides the horizontal flex layout */
+/* 3. SERVICES SECTION (Vertical Accordion - STABILIZED) */
+    #services-container {
+        height: 100dvh; /* Dynamic height prevents address bar jumps */
+        min-height: 100dvh; 
+        overflow: hidden; /* Locks content so it can't glitch scroll */
+    }
+
     #services-container .accordion-slider { 
         flex-direction: column; 
-        height: 100vh; /* Ensure it fills screen vertically */
+        height: 100%; /* Fill the stable container */
+        width: 100%;
+        overflow: hidden;
     }
     
     #services-container .slide { 
         flex: 1; 
         width: 100%; 
-        min-height: auto; /* Let flex handle height */
         border-right: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        transition: flex 0.5s ease; /* Smooth growing */
+        
+        /* SMOOTHER TRANSITION SETTINGS */
+        transition: flex 0.5s cubic-bezier(0.25, 1, 0.5, 1); /* Smoother easing */
+        will-change: flex; /* Optimizes rendering for mobile */
+        overflow: hidden; /* Prevents content from flashing outside */
+        position: relative;
     }
     
-    /* The active slide expands vertically */
+    /* The active slide expands */
     #services-container .slide.active { 
-        flex: 5; 
+        flex: 6; /* Increased ratio slightly for better content fit */
     }
 
-    /* Rotate text back to horizontal for vertical slides */
+    /* --- CONTENT STYLING --- */
+    
+    /* Rotate text back to horizontal */
     #services-container .car-brand { 
         transform: none; 
         writing-mode: horizontal-tb;
@@ -767,50 +695,57 @@ body {
         font-size: 14px;
         letter-spacing: 2px;
         opacity: 0.7;
+        transition: opacity 0.3s ease;
     }
     
-    /* Hide the brand name when active to make room for main content */
+    /* Hide label when active */
     #services-container .slide.active .car-brand {
         opacity: 0; 
+        pointer-events: none;
     }
 
-    /* Position Number */
     #services-container .slide-number {
-        font-size: 40px;
+        font-size: 32px; /* Slightly smaller to prevent overlap */
         bottom: 20px;
         right: 20px; 
         left: auto;
         top: auto;
     }
 
-    /* Content Styling */
     #services-container .slide-content {
         position: absolute;
-        bottom: 30px;
+        bottom: 20px;
         left: 20px;
         right: 20px;
-        opacity: 0; /* Hidden by default */
-        transition: opacity 0.3s ease 0.2s; /* Delay appearance */
+        top: auto;
+        padding-top: 0; /* Remove desktop padding */
+        
+        opacity: 0; 
+        transition: opacity 0.4s ease 0.3s; /* Delay ensures smooth fade in */
         text-align: left;
+        pointer-events: none; /* Prevents clicking while hidden */
     }
 
     #services-container .slide.active .slide-content {
         opacity: 1;
+        pointer-events: auto;
     }
 
     #services-container .car-name {
-        font-size: 28px;
+        font-size: 24px;
         margin-bottom: 5px;
+        line-height: 1.1;
     }
 
     #services-container .car-subtitle {
-        font-size: 14px;
-        margin-bottom: 0;
+        font-size: 13px;
+        margin-bottom: 10px;
+        display: block; /* Ensure it takes space */
     }
     
-    /* Hide navigation arrows on mobile */
+    /* Hide desktop arrows */
     #services-container .navigation-arrows {
-        display: none; 
+        display: none !important; 
     }
 }
 
@@ -820,17 +755,10 @@ body {
         font-size: 2.2rem;
     }
     
-    .gallery--bento {
-        gap: 0.5vh;
-        grid-template-columns: repeat(3, 32vw); 
-        grid-template-rows: repeat(4, 15vh); 
-    }
-
     .about-text-content h2 {
         font-size: 1.75rem;
     }
 
-    /* Relax justification on very small screens */
     .about-text-content p {
         text-align: center;
         text-align-last: center;
