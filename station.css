@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Hairline&display=swap');
+
 /* --- STATION SECTION --- */
 #station-section {
     position: relative;
@@ -19,11 +22,11 @@
 
 .station-content {
     position: absolute;
-    top: 15%; /* Adjusted slightly for better vertical balance */
-    left: 10%;
+    top: 6%; /* Adjusted slightly for better vertical balance */
     z-index: 2; 
     pointer-events: none; /* Allows clicks to pass through to the 3D model */
     max-width: 80%; /* Prevents text from hitting the right edge */
+    align-items: center;
 }
 
 /* IMPORTANT: Re-enable clicks for the button inside the non-clickable container */
@@ -33,18 +36,58 @@
 }
 
 .station-content h2 {
-    font-family: 'Instrument Serif', serif;
+
     font-size: 4rem;
     color: white;
-    margin-bottom: 10px;
+    margin-bottom: 2px;
     line-height: 1.1;
+    text-align: center;
+    font-family: 'Bungee Hairline', sans-serif;
+    font-weight: 500;
 }
 
 .station-content p {
-    font-family: 'Quicksand', sans-serif;
     font-size: 1.5rem;
-    color: #ccc;
+    color: #ffffff;
+    text-align: center;
+    font-family: "Bruno Ace";
+    font-weight: 50;
 }
+
+#explore-btn {
+    /* --- Positioning Logic --- */
+    position: absolute;       /* Frees it from the document flow */
+    left: 50%;               /* Pushes it to the middle */            /* Positions it 20% from the bottom (adjust as needed) */
+    transform: translateX(-50%); /* Pulls it back 50% of its own width to center perfectly */
+    z-index: 10;       
+    top: 280%;  
+
+    /* --- Visual Styles --- */
+    padding: 12px 30px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    font-family: "Bruno Ace";
+    font-size: 1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    width: 600px;
+    font-weight: 200;
+    
+    /* Ensure opacity and pointer events allow interaction */
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#explore-btn:hover {
+    background: white;
+    color: black;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+
 
 /* --- STATION FOOTER (Split Layout) --- */
 #station-footer {

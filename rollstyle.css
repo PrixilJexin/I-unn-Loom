@@ -17,7 +17,12 @@
     padding: 0;
     background-color: var(--bg-color);
     overflow: hidden; /* Prevent horizontal scrollbars */
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 20px;
+    min-width: 1200px;
 }
+
 
 /* --- ROLLING TEXT STYLES --- */
 @font-face {
@@ -222,4 +227,23 @@
     .card-left-col {
         height: 40vh; /* Make image shorter on small phones */
     }
+}
+
+/* Ensure the Rolling Text section sits at a lower level */
+.wide-card-section.main-container {
+    position: relative;
+    z-index: 1; /* Lower z-index */
+    /* Ensure it has a background color if your body bg is different */
+    background-color: #0b0b0b; 
+}
+
+/* Ensure the Services section sits ON TOP and covers the previous one */
+#services-container {
+    position: relative;
+    z-index: 5; /* Higher z-index to slide over */
+    background-color: #0b0b0b; /* MUST be solid, not transparent */
+    min-height: 100vh; /* Ensure it has height for the effect to be visible */
+    
+    /* Optional: Add a shadow to enhance the "card" look sliding over */
+    box-shadow: 0 -20px 50px rgba(0,0,0,0.8); 
 }

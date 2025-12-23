@@ -130,7 +130,7 @@
             <div class="station-content">
                 <h2>The Next Frontier</h2>
                 <p>Experience the architecture of tomorrow.</p>
-                <button id="explore-btn">Thrusters</button>
+                <button id="explore-btn">Initialize: THRUSTERS</button>
             </div>
 
             <div id="station-footer" class="hidden-footer">
@@ -181,6 +181,21 @@
 
         gsap.ticker.lagSmoothing(0);
     </script>
+    <script>
+    document.addEventListener("DOMContentLoaded", (event) => {
+        gsap.registerPlugin(ScrollTrigger);
+
+        ScrollTrigger.create({
+            trigger: ".wide-card-section",
+            start: "top top", 
+            end: "bottom top", 
+            pin: true, 
+            pinSpacing: false, // This is the key: allows the next section to scroll OVER the pinned one
+            anticipatePin: 1
+        });
+    });
+</script>
+
 
     <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
         <defs>

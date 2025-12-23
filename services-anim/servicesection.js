@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // 1. Calculate Glitch Intensity
                 // INCREASED MULTIPLIER to 50 (was 15). 
                 // Since snapping is fast, we need a stronger effect to make it visible.
-                const glitchAmount = (1 - visibility) * 15; 
+                const glitchAmount = (1 - visibility) * 5; 
                 displacementMap.scale.baseVal = glitchAmount;
 
                 // 2. Fade the INNER CONTENT
