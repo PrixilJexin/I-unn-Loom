@@ -4,23 +4,23 @@
     --bg-color: #0b0b0b;
 }
 
-/* --- MAIN SECTION LAYOUT --- */
+/* --- MAIN SECTION (Section 1) --- */
 .wide-card-section.main-container {
     display: flex;
     width: 100%;
-    /* Ensure it fills at least the viewport height, but can grow if content needs it */
+    /* FIXED: Changed from min-width: 1200px to max-width: 100% to fit mobile screens */
+    max-width: 100%; 
     min-height: 100vh;
     align-items: center; 
     justify-content: center;
     position: relative;
-    z-index: 10;
+    /* FIXED: Z-Index 1 (Lowest) so other sections slide OVER it */
+    z-index: 1;
     padding: 0;
     background-color: var(--bg-color);
-    overflow: hidden; /* Prevent horizontal scrollbars */
-    margin-left: 10px;
-    margin-right: 10px;
+    overflow: hidden; 
+    margin: 0 10px; /* Desktop margins */
     border-radius: 20px;
-    min-width: 1200px;
 }
 
 
@@ -36,10 +36,9 @@
 .roll-text-wrapper {
     display: flex;
     flex-direction: column;
-    /* Default: Align right for desktop */
     align-items: flex-end; 
     justify-content: center;
-    gap: clamp(0.2rem, 1vw, 0.5rem); /* Responsive gap */
+    gap: clamp(0.2rem, 1vw, 0.5rem); 
     width: 100%;
 }
 
@@ -54,8 +53,8 @@
     --text-color-hover: rgb(255, 234, 0); 
     
     /* RESPONSIVE FONT SIZE */
-    /* Scales smoothly: Minimum 3rem, Preferred 9vw, Maximum 10rem */
-    --font-size: clamp(3rem, 9vw, 10rem); 
+    /* Adjusted clamp for better fit on phone screens */
+    --font-size: clamp(2.5rem, 9vw, 10rem); 
 
     font-family: 'Bitcount Prop Single', sans-serif; 
     text-decoration: none;
@@ -67,7 +66,7 @@
     display: flex;
     overflow: hidden;
     cursor: pointer;
-    white-space: nowrap; /* Prevent word wrapping on small screens */
+    white-space: nowrap; 
 }
 
 .word:visited { color: var(--clr-txt); }
@@ -108,13 +107,11 @@
   z-index: 2;
   color: white;
   font-family: "Mona Sans", sans-serif;
-
   background: transparent; 
   border: none;
   box-shadow: none;
 }
 
-/* Inner Content Wrapper */
 .glow-card > .card-inner-content {
   width: 100%;
   height: 100%;
@@ -128,7 +125,6 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    /* On desktop, fill screen height. On mobile, let content define height */
     min-height: 100vh; 
     align-items: stretch; 
     justify-content: space-between;
@@ -136,7 +132,7 @@
 
 /* LEFT COLUMN (Image) */
 .card-left-col {
-    flex: 1; /* Take up 50% space */
+    flex: 1; 
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -148,102 +144,131 @@
 
 /* RIGHT COLUMN (Rolling Text) */
 .card-right-col {
-    flex: 1; /* Take up 50% space */
+    flex: 1; 
     display: flex;
     align-items: center; 
     justify-content: flex-end; 
-    
-    /* Responsive Padding: 5% on laptop, more on huge screens */
     padding-right: 5vw; 
-    padding-left: 2rem; /* Safety padding */
+    padding-left: 2rem; 
 }
 
 /* Image Styles */
 .card-image {
     width: 100%;        
     height: 100%;       
-    min-height: 100vh; /* Force full height on desktop */
+    min-height: 100vh; 
     border-radius: 0;   
     box-shadow: none; 
     object-fit: cover;  
     object-position: center;
 }
 
-/* Cleanup old elements */
+/* Cleanup */
 .glow-card .glow,
 .glow-card .glow:after {
     display: none;
 }
 
 
+/* --- SECTION 2 (Services) --- */
+#services-container {
+    position: relative;
+    /* Z-Index 5: Higher than Section 1, Lower than Section 3 */
+    z-index: 5; 
+    background-color: #0b0b0b; 
+    min-height: 100vh; 
+    box-shadow: 0 -20px 50px rgba(0,0,0,0.8); 
+}
+
+/* --- SECTION 3 (New) --- */
+/* Add id="third-section" to your 3rd HTML container */
+#third-section {
+    position: relative;
+    /* Z-Index 10: Highest layer to roll over Section 2 */
+    z-index: 10; 
+    background-color: #0b0b0b;
+    min-height: 100vh;
+    width: 100%;
+    box-shadow: 0 -20px 50px rgba(0,0,0,0.8); 
+}
+
+
 /* --- RESPONSIVE BREAKPOINTS --- */
 
-/* 1. Tablet Portrait & Mobile (Stack Layout) */
 @media (max-width: 1024px) {
+    
+    /* Fix Main Container Margins */
+    .wide-card-section.main-container {
+        margin: 0; 
+        border-radius: 0; 
+        min-height: auto; 
+    }
+
+    /* Stack Columns */
     .card-content-split {
-        flex-direction: column-reverse; /* Text on top, Image on bottom */
-        height: auto; /* Let content determine height */
+        /* Stack Text on top, Image on bottom */
+        flex-direction: column-reverse; 
+        height: auto; 
         min-height: auto;
     }
 
     .card-left-col, .card-right-col {
-        flex: auto; /* Reset flex sizing */
+        flex: auto; 
         width: 100%;
     }
 
-    /* Text Section on Mobile/Tablet */
+    /* Text Section Adjustments */
     .card-right-col {
-        padding: 4rem 1rem; /* Add breathing room top/bottom */
+        padding: 4rem 1rem; 
         justify-content: center;
         text-align: center;
     }
 
     .roll-text-wrapper {
-        align-items: center; /* Center text */
+        align-items: center; 
     }
 
-    /* Image Section on Mobile/Tablet */
+    /* --- IMAGE FIX START --- */
     .card-left-col {
-        height: 50vh; /* Image takes half the screen height */
+        /* CHANGED: Removed max-height limit so the container can grow */
+        height: auto; 
+        max-height: none; 
+        padding: 0;
     }
     
     .card-image {
-        min-height: 0; /* Reset desktop constraints */
-        height: 100%;
+        /* CHANGED: height: auto allows the image to use its natural aspect ratio */
+        height: auto; 
+        width: 100%;
+        
+        /* OPTION A: Use 'cover' to fill space (may crop slightly) */
+        object-fit: cover; 
+        
+        /* OPTION B: Use 'contain' if you absolutely MUST see 100% of the image content */
+        /* object-fit: contain; */ 
+
+        /* Ensure it doesn't get too small, but has no hard limit */
+        min-height: 300px; 
+    }
+    /* --- IMAGE FIX END --- */
+
+    /* Prevent Sections from being empty/huge */
+    #services-container, 
+    #third-section {
+        min-height: auto !important; 
+        padding-bottom: 50px; 
     }
 }
 
 /* 2. Small Mobile Phones */
 @media (max-width: 480px) {
     .word {
-        /* Even smaller font for tiny screens if needed */
-        --font-size: clamp(2rem, 13vw, 4rem);
+        --font-size: clamp(2rem, 13vw, 3.5rem); 
     }
     
     .card-right-col {
-        padding: 3rem 1rem;
+        padding: 2rem 1rem; 
     }
 
-    .card-left-col {
-        height: 40vh; /* Make image shorter on small phones */
-    }
-}
-
-/* Ensure the Rolling Text section sits at a lower level */
-.wide-card-section.main-container {
-    position: relative;
-    z-index: 1; /* Lower z-index */
-    /* Ensure it has a background color if your body bg is different */
-    background-color: #0b0b0b; 
-}
-
-/* Ensure the Services section sits ON TOP and covers the previous one */
-#services-container {
-    position: relative;
-    z-index: 5; /* Higher z-index to slide over */
-    background-color: #0b0b0b; /* MUST be solid, not transparent */
-    min-height: 100vh; /* Ensure it has height for the effect to be visible */
-    
-    /* Optional: Add a shadow to enhance the "card" look sliding over */
-    box-shadow: 0 -20px 50px rgba(0,0,0,0.8); 
+    /* DELETED: The 'max-height: 20vh' rule that was squashing your image */
 }

@@ -628,7 +628,7 @@ body {
 
 /* 3. SERVICES SECTION (Vertical Accordion - STABILIZED) */
     #services-container {
-        height: 100dvh; /* Dynamic height prevents address bar jumps */
+        height: 120dvh; /* Dynamic height prevents address bar jumps */
         min-height: 100dvh; 
         overflow: hidden; /* Locks content so it can't glitch scroll */
     }
