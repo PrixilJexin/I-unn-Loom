@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Mercedes AMG F1</title>
+    
+    <link rel="stylesheet" href="aboutus.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div id="canvas-container"></div>
+    <div id="nav-placeholder"></div>
+
+    <div class="scroll-container">
+        <section class="content-section" id="section-1">
+            <div class="text-box">
+                <h1>Engineering Perfection</h1>
+                <p>The Mercedes-AMG W14 E Performance.</p>
+                <p class="cam-info">Camera: Driver's View</p>
+            </div>
+        </section>
+
+        <section class="content-section" id="section-2">
+            <div class="text-box right-align">
+                <h1>Precision Details</h1>
+                <p>Aerodynamics refined for the absolute limit.</p>
+                <p class="cam-info">Camera: Top-Rear View</p>
+            </div>
+        </section>
+
+        <section class="content-section" id="section-3">
+            <div class="text-box">
+                <h1>Cockpit Perspective</h1>
+                <p>Where the driver meets the machine.</p>
+                <p class="cam-info">Camera: Side Interior</p>
+            </div>
+        </section>
+        
+        <div style="height: 50vh;"></div>
+    </div>
+
+    <script type="module" src="aboutus.js"></script>
+    <script src="navbar.js"></script>
+</body>
+</html>
