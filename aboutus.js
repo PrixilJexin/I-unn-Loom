@@ -6,7 +6,6 @@ import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 const container = document.getElementById('canvas-container');
 
 // --- SETTINGS ---
-// (You can tweak these numbers here directly)
 const params = {
     // Material Settings
     envMapIntensity: 0.93, 
@@ -91,10 +90,8 @@ loader.load(modelPath, (gltf) => {
 
             // Apply Material Settings from 'params'
             if (node.material) {
-                // Global Reflection Strength
                 node.material.envMapIntensity = params.envMapIntensity;
 
-                // Specific Car Body Parts
                 if (node.material.name.toLowerCase().includes('body') || 
                     node.material.name.toLowerCase().includes('paint')) {
                     node.material.roughness = params.roughness;
@@ -125,6 +122,7 @@ function initScrollAnimation() {
     });
 
     // --- Section Coordinates ---
+    
     // Section 2 Coords
     const sec2Pos = { x: 0.47, y: 2.83, z: 2.58 };
     const sec2Tar = { x: -0.21, y: 0.03, z: 2.14 };
@@ -133,9 +131,17 @@ function initScrollAnimation() {
     const sec3Pos = { x: -1.77, y: 0.08, z: 2.98 };
     const sec3Tar = { x: -1.01, y: 0.04, z: 2.74 };
 
+    // Section 4 Coords (UPDATED from Image 1)
+    const sec4Pos = { x: 3.26, y: 1.97, z: 2.33 };
+    const sec4Tar = { x: -0.21, y: 0.12, z: 0.09 };
+
+    // Section 5 Coords (UPDATED from Image 2)
+    const sec5Pos = { x: -0.01, y: 0.63, z: -3.48 };
+    const sec5Tar = { x: 0.03, y: 0.10, z: -0.53 };
+
     // --- Animation Sequence ---
     
-    // Transition 1: From Start -> Section 2
+    // Transition 1: Start -> Section 2
     tl.to(camera.position, { 
         x: sec2Pos.x, y: sec2Pos.y, z: sec2Pos.z, ease: "none" 
     }, "step1")
@@ -143,13 +149,29 @@ function initScrollAnimation() {
         x: sec2Tar.x, y: sec2Tar.y, z: sec2Tar.z, ease: "none" 
     }, "step1");
 
-    // Transition 2: From Section 2 -> Section 3
+    // Transition 2: Section 2 -> Section 3
     tl.to(camera.position, { 
         x: sec3Pos.x, y: sec3Pos.y, z: sec3Pos.z, ease: "none" 
     }, "step2")
       .to(cameraTarget, { 
         x: sec3Tar.x, y: sec3Tar.y, z: sec3Tar.z, ease: "none" 
     }, "step2");
+
+    // Transition 3: Section 3 -> Section 4
+    tl.to(camera.position, { 
+        x: sec4Pos.x, y: sec4Pos.y, z: sec4Pos.z, ease: "none" 
+    }, "step3")
+      .to(cameraTarget, { 
+        x: sec4Tar.x, y: sec4Tar.y, z: sec4Tar.z, ease: "none" 
+    }, "step3");
+
+    // Transition 4: Section 4 -> Section 5
+    tl.to(camera.position, { 
+        x: sec5Pos.x, y: sec5Pos.y, z: sec5Pos.z, ease: "none" 
+    }, "step4")
+      .to(cameraTarget, { 
+        x: sec5Tar.x, y: sec5Tar.y, z: sec5Tar.z, ease: "none" 
+    }, "step4");
 }
 
 // 7. ANIMATION LOOP
