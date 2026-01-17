@@ -64,17 +64,17 @@
 
     /* --- Visual Styles --- */
     padding: 12px 30px;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    color: white;
+    background: rgb(255, 225, 0);
+    border: 3px solid rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
     font-family: "Bruno Ace";
     font-size: 1rem;
     letter-spacing: 2px;
     cursor: pointer;
     transition: all 0.3s ease;
     text-transform: uppercase;
-    width: 600px;
-    font-weight: 200;
+    width: 300px;
+    font-weight: 300;
     
     /* Ensure opacity and pointer events allow interaction */
     opacity: 1;
@@ -82,9 +82,10 @@
 }
 
 #explore-btn:hover {
-    background: white;
+    background: rgb(255, 255, 255);
     color: black;
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    border: 5px solid rgb(255, 255, 255);
 }
 
 

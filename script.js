@@ -8,12 +8,12 @@ const SPACESHIP_PATH = 'spaceship_compressed.glb';
 
 // Camera Settings
 const START_POS = new THREE.Vector3(0, 80, 40); 
-const TARGET_POS = new THREE.Vector3(0, 0.2, 3); // Standard View
-const ZOOM_SPEED = 1.8; 
+const TARGET_POS = new THREE.Vector3(1, 2, 0.5); // Standard View
+const ZOOM_SPEED = 1; 
 
 // Warp Settings (Close-up Zoom)
 const WARP_POS = new THREE.Vector3(0, 0.0001, 0); 
-const WARP_SPEED = 2.0; 
+const WARP_SPEED = 1.0; 
 
 // State
 let isZooming = false; 
@@ -93,7 +93,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.enableZoom = false; 
 controls.autoRotate = true; 
-controls.autoRotateSpeed = 0.02;
+controls.autoRotateSpeed = 0.1;
 controls.enablePan = false; 
 controls.enabled = false; 
 
@@ -107,6 +107,11 @@ window.addEventListener('load', () => {
             loadingScreen.style.opacity = '0'; 
             setTimeout(() => { loadingScreen.style.display = 'none'; }, 500);
         }
+        
+        // --- NEW: TRIGGER TEXT ANIMATION HERE ---
+        initLetterAnimation(); 
+        // ----------------------------------------
+
         if (content) content.classList.add('visible');
         
         const nav = document.querySelector('.glass-nav'); 
@@ -127,21 +132,17 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// B. NEW: Reset Logic when leaving Station Section
+// B. Reset Logic when leaving Station Section
 const stationSection = document.getElementById('station-section');
 if (stationSection) {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            // If user SCROLLS AWAY from the station section
             if (!entry.isIntersecting) {
-                // Cancel Warp
                 isWarping = false; 
-                
-                // Re-enable controls if needed (or let lerp handle it)
                 controls.autoRotate = true;
             }
         });
-    }, { threshold: 0.1 }); // Trigger as soon as 10% is left/entered
+    }, { threshold: 0.1 }); 
 
     observer.observe(stationSection);
 }
@@ -155,7 +156,6 @@ function animate() {
     const delta = clock.getDelta();
     const elapsedTime = clock.getElapsedTime();
 
-    // A. Intro Zoom Logic
     if (isZooming) {
         camera.position.lerp(TARGET_POS, ZOOM_SPEED * delta);
         camera.lookAt(0, 0, 0);
@@ -167,29 +167,22 @@ function animate() {
         }
     }
 
-    // B. Warp Logic (Zoom In)
     if (isWarping) {
         camera.position.lerp(WARP_POS, WARP_SPEED * delta);
         camera.lookAt(0, 0, 0);
     } 
-    // C. NEW: Reset Logic (Zoom Out Back to Normal)
-    // If we are NOT warping and NOT in intro zoom, ensure we are at standard TARGET_POS
     else if (!isZooming && !isWarping && camera.position.distanceTo(TARGET_POS) > 0.1) {
-        // Smoothly drift back to normal view
-        camera.position.lerp(TARGET_POS, 1.0 * delta); // Slower reset speed
+        camera.position.lerp(TARGET_POS, 1.0 * delta); 
         camera.lookAt(0, 0, 0);
         
-        // Once close enough, re-enable controls
         if (camera.position.distanceTo(TARGET_POS) < 0.1) {
              controls.enabled = true;
         }
     }
 
-    // Update Mixers
     if (galaxyMixer) galaxyMixer.update(delta);
     if (spaceshipMixer) spaceshipMixer.update(delta);
 
-    // Spaceship Floating
     if (spaceshipModel) {
         spaceshipModel.position.y = Math.sin(elapsedTime * 0.5) * 0.2; 
     }
@@ -208,3 +201,41 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+// --- NEW HELPER FUNCTION: TEXT ANIMATION ---
+function initLetterAnimation() {
+    // Select all elements with the 'js-spanize' class
+    const elements = document.querySelectorAll('.js-spanize');
+    
+    elements.forEach(el => {
+        const text = el.innerText;
+        el.innerHTML = ''; // Clear current text
+        
+        // Split text into characters
+        const chars = text.split('');
+        
+        chars.forEach((char, index) => {
+            const span = document.createElement('span');
+            
+            // Preserve spaces
+            if (char === ' ') {
+                span.innerHTML = '&nbsp;';
+            } else {
+                span.innerText = char;
+            }
+            
+            // MATH FOR DELAY:
+            // If it's the subtitle, add an extra 1.5s delay so it plays after the title
+            let baseDelay = 0;
+            if (el.classList.contains('subtitle')) {
+                baseDelay = 1; 
+            }
+            
+            // Stagger each letter by 0.05s
+            const delay = baseDelay + (index * 0.05);
+            span.style.animationDelay = `${delay}s`;
+            
+            el.appendChild(span);
+        });
+    });
+}
