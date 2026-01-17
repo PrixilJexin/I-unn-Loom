@@ -108,8 +108,14 @@ body {
 /* --- FONT LOADING --- */
 /* 1. LOAD THE FONT CORRECTLY */
 @font-face {
-    font-family: 'Seraphine'; /* Name used in the CSS below */
-    src: url('fonts/Seraphine.otf') format('opentype'); /* Correct path and format */
+    font-family: 'Seraphine'; 
+    src: url('fonts/Seraphine.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'BebasNeue-Regular'; 
+    src: url('fonts/BebasNeue-Regular.ttf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
@@ -119,62 +125,161 @@ body {
     height: 100vh;
     width: 100%;
     overflow: hidden;
-    background-color: #00000000;
-    margin-top: 6%;
+    background-color: transparent;
+    margin-top: 6%; 
 }
 
 .hero-content {
     position: absolute;
-    top: 50%;
+    top: 60%;
     left: 5%;
     transform: translateY(-50%);
     text-align: left;
-    width: 80%;
-    max-width: 1200px;
+    
+    /* UPDATED: Allows the container to fill the screen width */
+    width: 90%; 
+    max-width: 1200px; /* Changed from 1200px to none */
+    
     z-index: 10;
+}
+
+.title-wrapper {
+    max-width: 1200px;
 }
 
 /* --- TITLE STYLING --- */
 .hero-title {
     font-family: 'Seraphine', sans-serif; 
-    font-size: 8rem;
+    font-size: 7rem;
     font-weight: 500; 
     text-transform: uppercase;
     line-height: 0.9;
     color: rgb(255, 255, 255);
-    /* CHANGED: Removed the 10px margin to bring them closer */
     margin-bottom: 0px; 
-    white-space: pre-wrap;
+    
+    /* Formatting settings */
+    white-space: pre-wrap; 
+    word-break: normal;
+    overflow-wrap: normal; 
+    
+    /* IMPORTANT: Keeps the text hidden until JS loads to prevent flash */
+    opacity: 1; 
 }
 
-/* --- SUBTITLE STYLING --- */
+/* Update this class */
+.ml12 .letter {
+  display: inline-block;
+  line-height: 1em;
+  transform-origin: 0 0;
+  
+  /* CRITICAL: Hides text initially so it doesn't show before animation starts */
+  opacity: 0; 
+}
+
 .subtitle {
-    font-family: "Instrument Serif", serif;
+    font-family: "BebasNeue-Regular", serif;
     font-size: 2.2rem;
     font-weight: 300;
     color: #ffffff;
     line-height: 1.2;
-    /* CHANGED: Use a negative margin to pull the text up */
-    /* Adjust this number (e.g. -20px, -30px) until it looks perfect */
-    margin-top: -20px; 
+    margin-top: -50px; 
     max-width: 800px;
     white-space: pre-line;
+    
+    /* 1. Aligns the text to the left */
+    text-align: left; 
+    
+    /* 2. Removes the auto margin that was pushing it to the right */
+    margin-left: 0; 
+    margin-right: auto;
+    
+    display: block;
 }
 
-/* --- THE GLOW ANIMATION --- */
-.js-spanize span {
-    opacity: 0;
-    animation: letter-glow 0.7s ease both;
+@media screen and (max-width: 768px) {
+    /* ... your existing hero settings ... */
+
+    .subtitle {
+        font-size: 1.2rem;
+        margin-top: 10px;
+        
+        /* NEW: Resets the right-alignment so it centers on mobile */
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
 }
 
-@keyframes letter-glow {
-    0%   { opacity: 0; text-shadow: 0px 0px 1px rgba(255,255,255,0.1); }
-    66%  { opacity: 1; text-shadow: 0px 0px 20px rgba(255,255,255,0.9); }
-    77%  { opacity: 1; }
-    /* Opacity set to 1 for solid white color */
-    100% { opacity: 1; text-shadow: 0px 0px 20px rgba(255,255,255,0.0); }
+/* --- NEW ANIMATION STYLES (Moving Letters 16) --- */
+/* --- HERO TITLES (ml12) --- */
+.ml12 .letter {
+    display: inline-block;
+    line-height: 1em;
+    transform-origin: 0 0;
+    /* HIDDEN INITIALLY: Prevents text from showing before animation */
+    opacity: 0; 
 }
-/* --- SCROLL INDICATOR --- */
+/* --- EFFECT 11 STYLES (Text Only) --- */
+
+.ml11 .text-wrapper {
+  position: relative;
+  display: inline-block;
+  padding-top: 0.1em;
+  padding-right: 0.05em;
+  padding-bottom: 0.15em;
+}
+
+/* Removed .ml11 .line and .ml11 .line1 classes completely */
+
+.ml11 .letter {
+  display: inline-block;
+  /* Changed from 0rem to 1em so letters don't collapse */
+  line-height: 1em; 
+  opacity: 0; 
+}
+@media screen and (max-width: 1024px) {
+    .hero-title {
+        font-size: 6rem;
+    }
+    .subtitle {
+        font-size: 1.8rem;
+        margin-top: -15px;
+    }
+}
+
+/* Mobile View */
+@media screen and (max-width: 768px) {
+    #hero {
+        margin-top: 15%;
+    }
+
+    .hero-content {
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        width: 90%;
+    }
+
+    .hero-title {
+        font-size: clamp(2rem, 10vw, 4rem); 
+        line-height: 1.1;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        margin-top: 10px; 
+    }
+}
+
+/* Small Mobile View */
+@media screen and (max-width: 480px) {
+    .hero-title {
+        font-size: clamp(1.8rem, 11vw, 3rem); 
+    }
+    .subtitle {
+        font-size: 1rem;
+    }
+}
 .scroll-indicator {
     position: absolute;
     bottom: 40px;
@@ -508,6 +613,82 @@ body {
 #services-container .nav-prev { left: 20px; }
 #services-container .nav-next { right: 20px; }
 #services-container .navigation-arrows:hover { background: rgba(255, 255, 255, 0.3); }
+/* --- MOBILE FIX FOR SERVICES SECTION --- */
+@media screen and (max-width: 768px) {
+    
+    /* 1. CONTAINER: Increased height */
+    #services-container {
+        /* Changed from 100dvh to 130dvh to make the section taller */
+        height: 130dvh !important; 
+        min-height: 130dvh !important;
+        max-height: 130dvh !important;
+        
+        /* Remove border radius for clean edge-to-edge look */
+        border-radius: 50 !important; 
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden; 
+    }
+
+    #services-container .slider-container {
+        height: 100%;
+        width: 100%;
+        border-radius: 0;
+    }
+
+    /* 2. SLIDER LAYOUT: Stack vertically */
+    #services-container .accordion-slider { 
+        flex-direction: column; 
+        height: 100%; 
+        width: 100%;
+    }
+
+    /* 3. SLIDES: Configure vertical stacking */
+    #services-container .slide { 
+        width: 100%; 
+        /* Default state for inactive slides */
+        flex: 1; 
+        
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        
+        transition: flex 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        will-change: flex; 
+        overflow: hidden; 
+        position: relative;
+    }
+
+    /* 4. ACTIVE SLIDE: Expands to fill majority of screen */
+    #services-container .slide.active { 
+        flex: 6; /* Active slide takes 6x the space of inactive ones */
+        filter: grayscale(0);
+        border-bottom: none;
+    }
+
+    /* 5. CONTENT ADJUSTMENTS for Mobile */
+    #services-container .slide-content {
+        padding-top: 0; 
+        bottom: 80px; 
+        left: 20px;
+        right: 20px;
+    }
+
+    #services-container .slide.active .slide-content {
+        bottom: 100px; /* Position text slightly higher when active */
+    }
+
+    #services-container .car-brand {
+        bottom: 140px; 
+        left: 20px;
+        transform: rotate(0deg); /* Ensure text is horizontal */
+        writing-mode: horizontal-tb;
+    }
+    
+    /* Hide navigation arrows on mobile (optional, clearer view) */
+    #services-container .navigation-arrows {
+        display: none !important;
+    }
+}
 
 /* ==========================================================================
    MOBILE & TABLET OPTIMIZATIONS

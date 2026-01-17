@@ -202,40 +202,47 @@ window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// --- NEW HELPER FUNCTION: TEXT ANIMATION ---
 function initLetterAnimation() {
-    // Select all elements with the 'js-spanize' class
-    const elements = document.querySelectorAll('.js-spanize');
-    
-    elements.forEach(el => {
-        const text = el.innerText;
-        el.innerHTML = ''; // Clear current text
-        
-        // Split text into characters
-        const chars = text.split('');
-        
-        chars.forEach((char, index) => {
-            const span = document.createElement('span');
-            
-            // Preserve spaces
-            if (char === ' ') {
-                span.innerHTML = '&nbsp;';
-            } else {
-                span.innerText = char;
-            }
-            
-            // MATH FOR DELAY:
-            // If it's the subtitle, add an extra 1.5s delay so it plays after the title
-            let baseDelay = 0;
-            if (el.classList.contains('subtitle')) {
-                baseDelay = 1; 
-            }
-            
-            // Stagger each letter by 0.05s
-            const delay = baseDelay + (index * 0.05);
-            span.style.animationDelay = `${delay}s`;
-            
-            el.appendChild(span);
-        });
+    if (typeof anime === 'undefined') { console.warn('Anime.js not loaded'); return; }
+
+    const titles = document.querySelectorAll('.ml12');
+    const subtitleLetters = document.querySelectorAll('.ml11 .letters'); 
+
+    // 1. Wrap Title Letters
+    titles.forEach(wrapper => {
+        if (!wrapper.querySelector('.letter')) {
+            wrapper.innerHTML = wrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+        }
     });
+
+    // 2. Wrap Subtitle Letters
+    subtitleLetters.forEach(wrapper => {
+        if (!wrapper.querySelector('.letter')) {
+            wrapper.innerHTML = wrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+        }
+    });
+
+    // 3. Animation Timeline
+    anime.timeline({loop: false}) 
+      
+      // A. Title Animation (Fade Up)
+      .add({
+        targets: '.ml12 .letter',
+        translateX: [40,0],
+        translateZ: 0,
+        opacity: [0,1], 
+        easing: "easeOutExpo",
+        duration: 10,
+        delay: (el, i) => 200 + 30 * i
+      })
+
+      // B. Subtitle Animation (Letters Ripple In)
+      .add({
+        targets: '.ml11 .letter',
+        opacity: [0,1],
+        easing: "easeOutExpo",
+        duration: 50,
+        offset: '-=800', // Starts overlapping with the title animation
+        delay: (el, i) => 34 * (i+1) // The sequential "ripple" delay
+      });
 }

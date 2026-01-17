@@ -42,7 +42,7 @@
     margin-bottom: 2px;
     line-height: 1.1;
     text-align: center;
-    font-family: 'Bungee Hairline', sans-serif;
+    font-family: 'Bruno Ace', sans-serif;
     font-weight: 500;
 }
 
@@ -60,7 +60,7 @@
     left: 50%;               /* Pushes it to the middle */            /* Positions it 20% from the bottom (adjust as needed) */
     transform: translateX(-50%); /* Pulls it back 50% of its own width to center perfectly */
     z-index: 10;       
-    top: 280%;  
+    top: 290%;  
 
     /* --- Visual Styles --- */
     padding: 12px 30px;
