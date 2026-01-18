@@ -131,7 +131,7 @@ body {
 
 .hero-content {
     position: absolute;
-    top: 60%;
+    top: 40%;
     left: 5%;
     transform: translateY(-50%);
     text-align: left;
@@ -153,16 +153,15 @@ body {
     font-size: 7rem;
     font-weight: 500; 
     text-transform: uppercase;
-    line-height: 0.9;
+    /* CHANGED: Increased slightly from 0.9 to 1.0 to help with bounding box */
+    line-height: 1.0; 
     color: rgb(255, 255, 255);
     margin-bottom: 0px; 
     
-    /* Formatting settings */
     white-space: pre-wrap; 
     word-break: normal;
     overflow-wrap: normal; 
     
-    /* IMPORTANT: Keeps the text hidden until JS loads to prevent flash */
     opacity: 1; 
 }
 
@@ -176,6 +175,42 @@ body {
   opacity: 0; 
 }
 
+/* --- HERO TITLES (ml12) --- */
+/* The "Mask" Container */
+.ml12 {
+    overflow: hidden; 
+    position: relative;
+    display: block; 
+    
+    /* CRITICAL FIX: Adds space at the top/bottom inside the mask so tips aren't cut */
+    padding-top: 0.2em; 
+    padding-bottom: 0.1em;
+    
+    /* OPTIONAL: Pulls the whole block up slightly to compensate for the new padding */
+    margin-top: -0.2em; 
+}
+
+/* The Text inside that moves */
+.ml12 .letter-wrapper {
+    display: block;
+    will-change: transform;
+}
+
+/* --- HERO SUBTITLE (ml11) --- */
+/* For the paragraph, we wrap words individually to simulate lines */
+.ml11 .word-mask {
+    overflow: hidden;
+    display: inline-block; /* Keeps words flowing naturally */
+    vertical-align: top;
+    margin-right: 0.25em; /* Space between words */
+    padding-bottom: 0.2em; /* Prevents descenders (g, y, j) from being cut off */
+    margin-bottom: -0.2em;
+}
+
+.ml11 .word-text {
+    display: inline-block;
+    will-change: transform;
+}
 .subtitle {
     font-family: "BebasNeue-Regular", serif;
     font-size: 2.2rem;
@@ -224,7 +259,7 @@ body {
 .ml11 .text-wrapper {
   position: relative;
   display: inline-block;
-  padding-top: 0.1em;
+  padding-top: 0.5em;
   padding-right: 0.05em;
   padding-bottom: 0.15em;
 }
@@ -234,7 +269,7 @@ body {
 .ml11 .letter {
   display: inline-block;
   /* Changed from 0rem to 1em so letters don't collapse */
-  line-height: 1em; 
+  line-height: 1.5em; 
   opacity: 0; 
 }
 @media screen and (max-width: 1024px) {

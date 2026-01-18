@@ -1,183 +1,135 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
 // --- CONFIGURATION ---
 const container = document.getElementById('canvas-container');
 
-// --- SETTINGS ---
+// --- LIGHTING SETTINGS (Preserved) ---
 const params = {
-    // Material Settings
-    envMapIntensity: 0.93, 
-    roughness: 0.2,
-    metalness: 1.0,
-    clearcoat: 1.0,
-    
-    // Light Settings
-    exposure: 2.5,
-    mainLight: 5.0,
-    rimLights: 15.0,
-    rearLight: 10.0
+    envMapIntensity: 1.0, 
+    exposure: 0.30,      
+    ambientIntensity: 2.87, 
+    dirLightIntensity: 6.48, 
+    bgColor: 0x000d19    
 };
 
 // 1. SCENE SETUP
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x050505);
+scene.background = new THREE.Color(params.bgColor);
+scene.fog = new THREE.Fog(params.bgColor, 10, 80); 
 
 // 2. CAMERA SETUP
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 1000);
-// Initial Position (Section 1)
-camera.position.set(0.00, 0.14, -0.01); 
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-// Initial LookAt Target (Section 1)
-const cameraTarget = new THREE.Vector3(0.00, 0.09, 0.61); 
+// --- START POSITION (Image 1: 221253.png) ---
+camera.position.set(16.46, 24.30, -36.02);
+// Global target object that we will animate
+const cameraTarget = new THREE.Vector3(15.76, 25.02, -11.24); 
 
 // 3. RENDERER SETUP
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = params.exposure; 
+renderer.toneMappingExposure = params.exposure;
 container.appendChild(renderer.domElement);
 
-// 4. LIGHTING SETUP
-const rgbeLoader = new RGBELoader();
-rgbeLoader.load('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_09_1k.hdr', function(texture) {
-    texture.mapping = THREE.EquirectangularReflectionMapping;
-    scene.environment = texture;
-});
+// 4. LIGHTING
+const ambientLight = new THREE.AmbientLight(0xffffff, params.ambientIntensity);
+scene.add(ambientLight);
 
-// Main Directional Light
-const dirLight = new THREE.DirectionalLight(0xffffff, params.mainLight);
-dirLight.position.set(5, 10, 7);
+const dirLight = new THREE.DirectionalLight(0xffffff, params.dirLightIntensity);
+dirLight.position.set(-18, 4.2, -77);
 dirLight.castShadow = true;
 scene.add(dirLight);
 
-// Rim Lights
-const rimLight1 = new THREE.SpotLight(0xffffff, params.rimLights);
-rimLight1.position.set(-10, 2, -5);
-scene.add(rimLight1);
-
-const rimLight2 = new THREE.SpotLight(0xffffff, params.rimLights);
-rimLight2.position.set(10, 2, -5);
-scene.add(rimLight2);
-
-// Rear Light
-const rearLight = new THREE.SpotLight(0xffffff, params.rearLight);
-rearLight.position.set(0, 5, -10);
-scene.add(rearLight);
-
 // 5. LOAD MODEL
 const loader = new GLTFLoader();
-const modelPath = './assets/amg-w14-s1-wwwvecarzcom (1)/source/f1_2023_mercedes_amg_w14_e_performance_s1.glb';
+const modelPath = './assets/station/raining_city.glb'; 
 
-let carModel = null;
+let cityModel = null;
 
 loader.load(modelPath, (gltf) => {
-    carModel = gltf.scene;
+    cityModel = gltf.scene;
+    scene.add(cityModel);
     
-    const box = new THREE.Box3().setFromObject(carModel);
-    const center = box.getCenter(new THREE.Vector3());
-    carModel.position.sub(center);
-
-    // Initial Material & Shadow setup
-    carModel.traverse((node) => {
-        if (node.isMesh) {
-            node.castShadow = true;
-            node.receiveShadow = true;
-
-            // Apply Material Settings from 'params'
-            if (node.material) {
-                node.material.envMapIntensity = params.envMapIntensity;
-
-                if (node.material.name.toLowerCase().includes('body') || 
-                    node.material.name.toLowerCase().includes('paint')) {
-                    node.material.roughness = params.roughness;
-                    node.material.metalness = params.metalness;
-                    node.material.clearcoat = params.clearcoat;
-                }
-            }
-        }
-    });
-
-    scene.add(carModel);
-    
-    // Start animation sequence once model is loaded
+    // Start animation timeline once model is loaded
     initScrollAnimation();
+}, undefined, (error) => {
+    console.error('An error happened loading the model:', error);
 });
 
-// 6. SCROLL ANIMATION (GSAP SEQUENCE)
+// 6. PAGE LOAD LOGIC
+const loadingScreen = document.getElementById('loading-screen'); 
+
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        if (loadingScreen) {
+            loadingScreen.style.opacity = '0'; 
+            setTimeout(() => { loadingScreen.style.display = 'none'; }, 500);
+        }
+        const nav = document.querySelector('.glass-nav'); 
+        if (nav) nav.classList.add('slide-in'); 
+    }, 2500); 
+});
+
+// 7. SCROLL ANIMATION
 function initScrollAnimation() {
     gsap.registerPlugin(ScrollTrigger);
 
+    // Text Fade Effects
+    const sections = document.querySelectorAll('.content-section');
+    sections.forEach(sec => {
+        const textBox = sec.querySelector('.text-box');
+        ScrollTrigger.create({
+            trigger: sec,
+            start: "top center",
+            onEnter: () => textBox.classList.add('visible'),
+            onLeaveBack: () => textBox.classList.remove('visible')
+        });
+    });
+
+    // Master Timeline
     const tl = gsap.timeline({
         scrollTrigger: {
             trigger: ".scroll-container",
             start: "top top",
             end: "bottom bottom",
-            scrub: 1.0, 
+            scrub: 1.5, 
         }
     });
 
-    // --- Section Coordinates ---
-    
-    // Section 2 Coords
-    const sec2Pos = { x: 0.47, y: 2.83, z: 2.58 };
-    const sec2Tar = { x: -0.21, y: 0.03, z: 2.14 };
-    
-    // Section 3 Coords
-    const sec3Pos = { x: -1.77, y: 0.08, z: 2.98 };
-    const sec3Tar = { x: -1.01, y: 0.04, z: 2.74 };
+    // --- COORDINATE SEQUENCE (Mapped from your 7 new images) ---
 
-    // Section 4 Coords (UPDATED from Image 1)
-    const sec4Pos = { x: 3.26, y: 1.97, z: 2.33 };
-    const sec4Tar = { x: -0.21, y: 0.12, z: 0.09 };
+    // Move 1: Drop to street level
+    tl.to(camera.position, { x: 15.39, y: 2.16, z: -35.43, ease: "power1.inOut" }, "s1")
+      .to(cameraTarget,    { x: 15.88, y: 1.86, z: -10.64, ease: "power1.inOut" }, "s1");
 
-    // Section 5 Coords (UPDATED from Image 2)
-    const sec5Pos = { x: -0.01, y: 0.63, z: -3.48 };
-    const sec5Tar = { x: 0.03, y: 0.10, z: -0.53 };
+    // Move 2: Look straight down/forward from mid-height
+    tl.to(camera.position, { x: 15.18, y: 10.85, z: 12.97, ease: "power1.inOut" }, "s2")
+      .to(cameraTarget,    { x: 15.88, y: 1.80, z: -10.60, ease: "power1.inOut" }, "s2");
 
-    // --- Animation Sequence ---
-    
-    // Transition 1: Start -> Section 2
-    tl.to(camera.position, { 
-        x: sec2Pos.x, y: sec2Pos.y, z: sec2Pos.z, ease: "none" 
-    }, "step1")
-      .to(cameraTarget, { 
-        x: sec2Tar.x, y: sec2Tar.y, z: sec2Tar.z, ease: "none" 
-    }, "step1");
+    // Move 3: Top-down view
+    tl.to(camera.position, { x: 16.33, y: 35.65, z: 12.36, ease: "power1.inOut" }, "s3")
+      .to(cameraTarget,    { x: 16.33, y: 1.97, z: 12.59, ease: "power1.inOut" }, "s3");
 
-    // Transition 2: Section 2 -> Section 3
-    tl.to(camera.position, { 
-        x: sec3Pos.x, y: sec3Pos.y, z: sec3Pos.z, ease: "none" 
-    }, "step2")
-      .to(cameraTarget, { 
-        x: sec3Tar.x, y: sec3Tar.y, z: sec3Tar.z, ease: "none" 
-    }, "step2");
+    // Move 4: Rotate to side view
+    tl.to(camera.position, { x: 16.46, y: 27.73, z: 1.46, ease: "power1.inOut" }, "s4")
+      .to(cameraTarget,    { x: 15.95, y: 26.96, z: 25.00, ease: "power1.inOut" }, "s4");
 
-    // Transition 3: Section 3 -> Section 4
-    tl.to(camera.position, { 
-        x: sec4Pos.x, y: sec4Pos.y, z: sec4Pos.z, ease: "none" 
-    }, "step3")
-      .to(cameraTarget, { 
-        x: sec4Tar.x, y: sec4Tar.y, z: sec4Tar.z, ease: "none" 
-    }, "step3");
+    // Move 5: Pan further right
+    tl.to(camera.position, { x: 24.11, y: 28.31, z: 8.61, ease: "power1.inOut" }, "s5")
+      .to(cameraTarget,    { x: 5.00, y: 27.43, z: 20.24, ease: "power1.inOut" }, "s5");
 
-    // Transition 4: Section 4 -> Section 5
-    tl.to(camera.position, { 
-        x: sec5Pos.x, y: sec5Pos.y, z: sec5Pos.z, ease: "none" 
-    }, "step4")
-      .to(cameraTarget, { 
-        x: sec5Tar.x, y: sec5Tar.y, z: sec5Tar.z, ease: "none" 
-    }, "step4");
+    // Move 6: Wide shot pull-back
+    tl.to(camera.position, { x: 44.17, y: 29.24, z: -3.61, ease: "power1.inOut" }, "s6")
+      .to(cameraTarget,    { x: 5.00, y: 27.43, z: 20.24, ease: "power1.inOut" }, "s6");
 }
 
-// 7. ANIMATION LOOP
+// 8. RENDER LOOP
 function animate() {
     requestAnimationFrame(animate);
-    // Critical: Update where the camera looks every frame
     camera.lookAt(cameraTarget); 
     renderer.render(scene, camera);
 }

@@ -203,46 +203,57 @@ window.addEventListener('resize', () => {
 });
 
 function initLetterAnimation() {
-    if (typeof anime === 'undefined') { console.warn('Anime.js not loaded'); return; }
+    if (typeof gsap === 'undefined') { console.warn('GSAP not loaded'); return; }
 
-    const titles = document.querySelectorAll('.ml12');
-    const subtitleLetters = document.querySelectorAll('.ml11 .letters'); 
+    const titles = document.querySelectorAll('.hero-title');
+    const subtitle = document.querySelector('.subtitle .letters');
 
-    // 1. Wrap Title Letters
-    titles.forEach(wrapper => {
-        if (!wrapper.querySelector('.letter')) {
-            wrapper.innerHTML = wrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
-        }
+    // --- 1. PREPARE TITLES (Slide Up Effect) ---
+    // For the big titles, we wrap the inner text in a span we can move
+    titles.forEach(title => {
+        // Wrap content in a div that acts as the moving element
+        // The .hero-title class in CSS already acts as the 'overflow: hidden' mask
+        title.innerHTML = `<span class="letter-wrapper">${title.textContent}</span>`;
     });
 
-    // 2. Wrap Subtitle Letters
-    subtitleLetters.forEach(wrapper => {
-        if (!wrapper.querySelector('.letter')) {
-            wrapper.innerHTML = wrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+    // --- 2. PREPARE SUBTITLE (Word Reveal Effect) ---
+    // Since splitting lines is hard without paid plugins, we split by WORD.
+    // It creates the same "rising text" visual.
+    if (subtitle) {
+        const words = subtitle.textContent.trim().split(/\s+/);
+        subtitle.innerHTML = words.map(word => 
+            `<span class="word-mask"><span class="word-text">${word}</span></span>`
+        ).join(' ');
+    }
+
+    // --- 3. GSAP ANIMATION SEQUENCE ---
+    const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+    // A. Animate Titles
+    tl.fromTo('.ml12 .letter-wrapper', 
+        { 
+            y: "110%", // Push text down 110% (completely hidden by mask)
+            skewY: 7   // Optional: Adds a slight "stretch" effect like the example
+        },
+        { 
+            y: "0%",   // Slide up to normal
+            skewY: 0,
+            duration: 1.5,
+            stagger: 0.15 // Delay between the two lines
         }
-    });
+    )
 
-    // 3. Animation Timeline
-    anime.timeline({loop: false}) 
-      
-      // A. Title Animation (Fade Up)
-      .add({
-        targets: '.ml12 .letter',
-        translateX: [40,0],
-        translateZ: 0,
-        opacity: [0,1], 
-        easing: "easeOutExpo",
-        duration: 10,
-        delay: (el, i) => 200 + 30 * i
-      })
-
-      // B. Subtitle Animation (Letters Ripple In)
-      .add({
-        targets: '.ml11 .letter',
-        opacity: [0,1],
-        easing: "easeOutExpo",
-        duration: 50,
-        offset: '-=800', // Starts overlapping with the title animation
-        delay: (el, i) => 34 * (i+1) // The sequential "ripple" delay
-      });
+    // B. Animate Subtitle Words
+    .fromTo('.ml11 .word-text', 
+        { 
+            y: "110%" // Words start hidden below their mask
+        },
+        { 
+            y: "0%",
+            duration: 1.2,
+            stagger: 0.02, // Fast ripple effect across words
+            ease: "power3.out"
+        },
+        "-=1.0" // Start overlapping with title animation
+    );
 }
