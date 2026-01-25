@@ -121,3 +121,13 @@ body {
     color: #ccc;
     margin-top: 10px;
 }
+
+/* Hide the HTML text boxes since we are using 3D text now */
+.content-section .text-box {
+    display: none !important;
+}
+
+/* Keep the sections for scroll-spacing, but make them invisible */
+.content-section {
+    pointer-events: none; /* Let clicks pass through to the 3D canvas */
+}
